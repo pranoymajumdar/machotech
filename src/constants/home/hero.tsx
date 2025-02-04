@@ -24,12 +24,5 @@ export const heroData = {
       ),
       variant: "outline",
     },
-  ],
-  trustBadge: {
-    label: "TrustSEAL Verified",
-    icon: (
-      <LucideCheckCircle className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-    ),
-    since: "Since 2017",
-  },
+  ]
 };

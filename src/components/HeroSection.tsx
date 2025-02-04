@@ -142,29 +142,6 @@ export default function Hero() {
                 className="w-full h-full object-cover rounded-xl"
                 loading="eager"
               />
-
-              {/* Trust Badge */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.5 }}
-                className="absolute -bottom-4 right-4 bg-background/80 backdrop-blur-sm border border-border/50 rounded-xl p-3 shadow-lg"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="rounded-full bg-primary/10 p-2">
-                    {heroData.trustBadge.icon}
-                  </div>
-                  <div>
-                    <p className="font-medium text-sm">
-                      {heroData.trustBadge.label}
-                    </p>
-
-                    <p className="text-xs text-muted-foreground">
-                      {heroData.trustBadge.since}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
             </motion.div>
           </motion.div>
         </div>
