@@ -129,19 +129,6 @@ export default function MobileNav() {
               </div>
             </motion.div>
           </motion.div>
-
-          {/* Bottom Get Quote Button */}
-          <div className="p-4 border-t mt-auto">
-            <Button
-              className="w-full"
-              size="lg"
-              onClick={() => {
-                setIsOpen(false);
-              }}
-            >
-              Get Quote
-            </Button>
-          </div>
         </div>
       </SheetContent>
     </Sheet>
