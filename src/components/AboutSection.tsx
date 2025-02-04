@@ -1,7 +1,7 @@
-import { LucideChevronRight, LucideBuilding2 } from "lucide-react";
-import { motion } from "framer-motion";
-import { useInView } from "react-intersection-observer";
 import { aboutData, statsCard } from "@/constants/home/about";
+import { motion } from "framer-motion";
+import { LucideBuilding2, LucideChevronRight } from "lucide-react";
+import { useInView } from "react-intersection-observer";
 
 
 export default function AboutSection() {

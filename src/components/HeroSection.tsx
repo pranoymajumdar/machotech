@@ -1,11 +1,11 @@
-import { motion } from "framer-motion";
-import { Button, ButtonProps } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { LucidePhone, LucideMail } from "lucide-react";
 import HeroPng from "@/assets/hero.png";
+import { Badge } from "@/components/ui/badge";
+import { Button, ButtonProps } from "@/components/ui/button";
 import { heroData } from "@/constants/home/hero";
+import { contantInfo } from "@/constants/utils";
 import { cn } from "@/lib/utils";
-
+import { motion } from "framer-motion";
+import { LucideMail, LucidePhone } from "lucide-react";
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
@@ -39,7 +39,10 @@ export default function Hero() {
             {/* Badge */}
             <motion.div variants={fadeIn}>
               <Badge variant="secondary" className="px-4 py-2">
-                <span className="text-sm font-medium">{heroData.badge}</span>
+                <span className="text-sm font-medium">
+                  {"GST No: "}
+                  {contantInfo.gst}
+                </span>
               </Badge>
             </motion.div>
 

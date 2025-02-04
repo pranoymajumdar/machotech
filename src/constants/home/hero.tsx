@@ -7,7 +7,6 @@ export const heroData = {
   title2: "Bandsaw Machines",
   description:
     "Leading manufacturer of precision bandsaw machines, delivering optimal functionality and durability for your industrial cutting needs.",
-  badge: "GST No: 23AABCI2856A1Z5",
   cta: [
     {
       label: "View Products",

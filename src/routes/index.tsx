@@ -1,7 +1,7 @@
-import { createFileRoute } from '@tanstack/react-router'
-import Container from '@/components/ui/container';
-import HeroSection from '@/components/HeroSection';
 import AboutSection from '@/components/AboutSection';
+import HeroSection from '@/components/HeroSection';
+import Container from '@/components/ui/container';
+import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/')({
   component: HomeComponent,
