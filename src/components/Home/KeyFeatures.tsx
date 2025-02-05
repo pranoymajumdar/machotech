@@ -7,7 +7,7 @@ import {
   LucideTimer,
   LucideWrench,
 } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 
 const features = [
   {

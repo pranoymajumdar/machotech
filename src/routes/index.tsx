@@ -1,12 +1,12 @@
-import AboutSection from '@/components/AboutSection';
-import HeroSection from '@/components/HeroSection';
-import OurProducts from '@/components/OurProducts';
-import KeyFeatures from '@/components/KeyFeatures';
-import OurExpertise from '@/components/OurExpertise';
-import Testimonials from '@/components/Testimonials';
+import AboutSection from '@/components/Home/AboutSection';
+import HeroSection from '@/components/Home/HeroSection';
+import OurProducts from '@/components/Home/OurProducts';
+import KeyFeatures from '@/components/Home/KeyFeatures';
+import OurExpertise from '@/components/Home/OurExpertise';
+import Testimonials from '@/components/Home/Testimonials';
 import Container from '@/components/ui/container';
 import { createFileRoute } from '@tanstack/react-router';
-import Certifications from '@/components/Certifications';
+import Certifications from '@/components/Home/Certifications';
 export const Route = createFileRoute('/')({
   component: HomeComponent,
 })

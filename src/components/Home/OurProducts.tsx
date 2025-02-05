@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { LucideArrowRight, LucideChevronRight, LucideEye } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 
 // Fake product data
 const products = [
