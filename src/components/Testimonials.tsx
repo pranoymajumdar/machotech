@@ -4,7 +4,7 @@ import { LucideQuote, LucideBuilding2, LucideStar } from "lucide-react";
 const testimonials = [
   {
     quote:
-      "The bandsaw machines from Indotech have significantly improved our production efficiency. Their precision and reliability are unmatched.",
+      "The bandsaw machines from mechotech have significantly improved our production efficiency. Their precision and reliability are unmatched.",
     author: "Robert Chen",
     position: "Production Manager",
     company: "TechMech Industries",
@@ -32,7 +32,7 @@ const testimonials = [
   },
   {
     quote:
-      "The precision and cut quality of Indotech machines have helped us maintain our high manufacturing standards. Highly recommended.",
+      "The precision and cut quality of mechotech machines have helped us maintain our high manufacturing standards. Highly recommended.",
     author: "Michael Kumar",
     position: "Technical Head",
     company: "AutoParts Global",

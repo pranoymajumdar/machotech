@@ -38,7 +38,7 @@ export default function Footer() {
           {/* Company Info - Takes 4 columns on large screens */}
           <div className="lg:col-span-5 space-y-6">
             <div className="space-y-4">
-              <h2 className="text-2xl font-bold">Indotech Industries</h2>
+              <h2 className="text-2xl font-bold">mechotech Industries</h2>
               <p className="text-muted-foreground leading-relaxed">
                 Leading manufacturer of high-quality bandsaw machines,
                 delivering precision and reliability since 1995.
@@ -137,7 +137,7 @@ export default function Footer() {
               <LucideBuilding2 className="w-4 h-4" />
               <span>GST No: 23AABCI2856A1Z5</span>
             </div>
-            <p>© 2024 Indotech Industries. All rights reserved.</p>
+            <p>© 2024 mechotech Industries. All rights reserved.</p>
             <div className="flex gap-6">
               <a
                 href="/privacy"

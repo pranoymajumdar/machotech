@@ -25,7 +25,7 @@ export const aboutData = {
   heading: [
     "About",
     " ",
-    <span className="text-primary font-normal">Indotech Industries</span>,
+    <span className="text-primary font-normal">mechotech Industries</span>,
   ],
   title: [
     "Leading Manufacturer of High-Quality",
