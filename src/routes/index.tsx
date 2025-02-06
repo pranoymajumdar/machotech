@@ -7,6 +7,7 @@ import Testimonials from '@/components/Home/Testimonials';
 import Container from '@/components/ui/container';
 import { createFileRoute } from '@tanstack/react-router';
 import Certifications from '@/components/Home/Certifications';
+
 export const Route = createFileRoute('/')({
   component: HomeComponent,
 })
@@ -15,8 +16,8 @@ function HomeComponent() {
   return (
     <Container as='main' className='space-y-28'>
       <HeroSection/>
-      <AboutSection/>
       <OurProducts/>
+      <AboutSection/>
       <KeyFeatures/>
       <OurExpertise/>
       <Testimonials/>

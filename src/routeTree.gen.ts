@@ -11,17 +11,12 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as ProductsImport } from './routes/products'
 import { Route as AboutUsImport } from './routes/about-us'
 import { Route as IndexImport } from './routes/index'
+import { Route as ProductsIndexImport } from './routes/products/index'
+import { Route as ProductsProductIdImport } from './routes/products/$productId'
 
 // Create/Update Routes
-
-const ProductsRoute = ProductsImport.update({
-  id: '/products',
-  path: '/products',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const AboutUsRoute = AboutUsImport.update({
   id: '/about-us',
@@ -32,6 +27,18 @@ const AboutUsRoute = AboutUsImport.update({
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ProductsIndexRoute = ProductsIndexImport.update({
+  id: '/products/',
+  path: '/products/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ProductsProductIdRoute = ProductsProductIdImport.update({
+  id: '/products/$productId',
+  path: '/products/$productId',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -53,11 +60,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutUsImport
       parentRoute: typeof rootRoute
     }
-    '/products': {
-      id: '/products'
+    '/products/$productId': {
+      id: '/products/$productId'
+      path: '/products/$productId'
+      fullPath: '/products/$productId'
+      preLoaderRoute: typeof ProductsProductIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/products/': {
+      id: '/products/'
       path: '/products'
       fullPath: '/products'
-      preLoaderRoute: typeof ProductsImport
+      preLoaderRoute: typeof ProductsIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -68,41 +82,46 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about-us': typeof AboutUsRoute
-  '/products': typeof ProductsRoute
+  '/products/$productId': typeof ProductsProductIdRoute
+  '/products': typeof ProductsIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about-us': typeof AboutUsRoute
-  '/products': typeof ProductsRoute
+  '/products/$productId': typeof ProductsProductIdRoute
+  '/products': typeof ProductsIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/about-us': typeof AboutUsRoute
-  '/products': typeof ProductsRoute
+  '/products/$productId': typeof ProductsProductIdRoute
+  '/products/': typeof ProductsIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about-us' | '/products'
+  fullPaths: '/' | '/about-us' | '/products/$productId' | '/products'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about-us' | '/products'
-  id: '__root__' | '/' | '/about-us' | '/products'
+  to: '/' | '/about-us' | '/products/$productId' | '/products'
+  id: '__root__' | '/' | '/about-us' | '/products/$productId' | '/products/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutUsRoute: typeof AboutUsRoute
-  ProductsRoute: typeof ProductsRoute
+  ProductsProductIdRoute: typeof ProductsProductIdRoute
+  ProductsIndexRoute: typeof ProductsIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutUsRoute: AboutUsRoute,
-  ProductsRoute: ProductsRoute,
+  ProductsProductIdRoute: ProductsProductIdRoute,
+  ProductsIndexRoute: ProductsIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -117,7 +136,8 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/about-us",
-        "/products"
+        "/products/$productId",
+        "/products/"
       ]
     },
     "/": {
@@ -126,8 +146,11 @@ export const routeTree = rootRoute
     "/about-us": {
       "filePath": "about-us.tsx"
     },
-    "/products": {
-      "filePath": "products.tsx"
+    "/products/$productId": {
+      "filePath": "products/$productId.tsx"
+    },
+    "/products/": {
+      "filePath": "products/index.tsx"
     }
   }
 }
