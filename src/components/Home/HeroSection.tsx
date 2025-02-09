@@ -105,22 +105,6 @@ export default function HeroSection() {
                     </motion.p>
                   </div>
 
-                  {/* Specs */}
-                  <motion.div
-                    className="flex flex-wrap gap-3"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 }}
-                  >
-                    {currentProduct.specs.map((spec, idx) => (
-                      <div
-                        key={idx}
-                        className="px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium"
-                      >
-                        {spec}
-                      </div>
-                    ))}
-                  </motion.div>
 
                   {/* Price and CTA */}
                   <motion.div
@@ -200,7 +184,7 @@ export default function HeroSection() {
                     <div className="absolute inset-0 backdrop-blur-sm rounded-3xl" />
                     <div className="relative h-full rounded-3xl overflow-hidden group">
                       <img
-                        src={currentProduct.image}
+                        src={currentProduct.images[0]}
                         alt={currentProduct.name}
                         className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
                         loading="eager"

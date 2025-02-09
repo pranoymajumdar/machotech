@@ -24,7 +24,7 @@ export function ProductCard({ product }: ProductCardProps) {
         {/* Large Image Container */}
         <div className="aspect-[16/9] overflow-hidden relative">
           <img
-            src={product.image}
+            src={product.images[0]}
             alt={product.name}
             className="h-full w-full object-cover transition-all duration-700 group-hover:scale-110"
           />
@@ -51,19 +51,6 @@ export function ProductCard({ product }: ProductCardProps) {
               </p>
             </div>
 
-            {/* Specs/Features List */}
-            {product.specs && (
-              <div className="flex flex-wrap gap-2">
-                {product.specs.slice(0, 3).map((spec, idx) => (
-                  <span
-                    key={idx}
-                    className="text-xs px-2.5 py-1 bg-muted rounded-full text-muted-foreground"
-                  >
-                    {spec}
-                  </span>
-                ))}
-              </div>
-            )}
           </CardContent>
 
           <CardFooter className="p-0 pt-6 flex items-end justify-between gap-4">
@@ -77,17 +64,23 @@ export function ProductCard({ product }: ProductCardProps) {
                     ₹{product.price.toLocaleString()}
                   </div>
                 </div>
-                <Button
-                  variant="default"
-                  size="lg"
-                  className="group/btn relative overflow-hidden"
+                <Link
+                  params={{ productId: product.id }}
+                  to="/products/$productId"
+                  className={cn(
+                    buttonVariants({
+                      variant: "default",
+                      size: "lg",
+                      className: "group/btn relative overflow-hidden",
+                    })
+                  )}
                 >
                   <span className="relative z-10 flex items-center gap-2">
                     View Product
                     <ArrowUpRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1" />
                   </span>
                   <div className="absolute inset-0 bg-primary/10 translate-y-full group-hover/btn:translate-y-0 transition-transform" />
-                </Button>
+                </Link>
               </>
             ) : (
               <>

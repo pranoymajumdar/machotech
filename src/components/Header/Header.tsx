@@ -33,7 +33,7 @@ export default function Header() {
         "relative transition-all duration-300",
         isScrolled ? "bg-background/80 backdrop-blur-lg border-b shadow-sm" : "bg-transparent"
       )}>
-        <Container>
+        <Container className="max-w-7xl">
           <div className="flex items-center justify-between h-16">
             {/* Left Section */}
             <div className="flex items-center gap-4">
