@@ -1,7 +1,7 @@
 import { navLinks } from "@/constants/nav";
 import { contantInfo } from "@/constants/utils";
 import { cn } from "@/lib/utils";
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   LucideArrowRight,
@@ -15,8 +15,7 @@ import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "../ui/sheet";
 
 export default function MobileNav() {
   const [isOpen, setIsOpen] = useState(false);
-  const [activeItem, setActiveItem] = useState(0);
-
+  const {pathname} = useLocation();
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
@@ -40,12 +39,11 @@ export default function MobileNav() {
                   <Link
                     to={item.href}
                     onClick={() => {
-                      setActiveItem(index);
                       setIsOpen(false);
                     }}
                     className={cn(
                       "relative flex items-center gap-2 px-4 py-3 my-1 rounded-lg transition-all duration-200",
-                      activeItem === index
+                      pathname === item.href
                         ? "bg-primary/10 text-primary"
                         : "hover:bg-muted"
                     )}
@@ -53,7 +51,7 @@ export default function MobileNav() {
                     <div className="flex-1">
                       <p className="font-medium">{item.name}</p>
                     </div>
-                    {activeItem === index && (
+                    {pathname === item.href && (
                       <motion.div
                         layoutId="activeIndicator"
                         className="w-1 h-8 bg-primary rounded-full"
@@ -79,7 +77,7 @@ export default function MobileNav() {
               <div className="space-y-4">
                 <div className="space-y-3">
                   <h3 className="text-sm font-medium text-muted-foreground">
-                    Quick Contact
+                    Contact
                   </h3>
                   <div className="space-y-2">
                     <a

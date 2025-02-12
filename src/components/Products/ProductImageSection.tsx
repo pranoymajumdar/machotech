@@ -9,7 +9,7 @@ export default function ProductImageSection({ product }: { product: Product }) {
   return (
     <div className="space-y-4 h-fit">
       <motion.div
-        className="aspect-square rounded-3xl overflow-hidden bg-gradient-to-br from-primary/50 to-primary/20 p-[2px]"
+        className="aspect-square rounded-3xl overflow-hidden transition-colors duration-300 dark:bg-gradient-to-br dark:from-primary/50 dark:to-primary/20 p-[2px] bg-[linear-gradient(199deg,rgba(255,255,255,1)0%,rgba(0,212,255,1)250%)]"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
       >
@@ -17,9 +17,9 @@ export default function ProductImageSection({ product }: { product: Product }) {
           <img
             src={product.images[selectedImage]}
             alt={product.name}
-            className="h-full w-full object-cover"
+            className="h-full w-full object-contain"
           />
-          <div className="absolute inset-0 bg-gradient-to-tr from-black/20 to-transparent" />
+          {/* <div className="absolute inset-0 bg-gradient-to-tr transition-colors duration-300 from-black/20 to-transparent" /> */}
         </div>
       </motion.div>
       <div className="grid grid-cols-4 gap-4">

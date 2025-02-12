@@ -6,6 +6,7 @@ import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import { TextScramble } from "@/components/ui/TextScramble";
 import { products as allProducts } from "@/constants/products";
+import GetQuoteModal from "../GetQuoteModal";
 
 const products = allProducts.filter((product) => product.featured);
 
@@ -16,7 +17,7 @@ export default function HeroSection() {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % products.length);
-    }, 5000);
+    }, 5000000);
 
     return () => clearInterval(timer);
   }, [currentIndex]);
@@ -89,10 +90,14 @@ export default function HeroSection() {
                   {/* Product Info */}
                   <div className="space-y-6">
                     <div className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight">
-                      <TextScramble
+                      {/* <TextScramble
                         text={currentProduct.name}
                         className="block"
-                      />
+                      /> */}
+
+                      <h1 className="block">
+                        {currentProduct.name}
+                      </h1>
                     </div>
 
                     <motion.p
@@ -159,6 +164,7 @@ export default function HeroSection() {
                           <ChevronRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                         </Link>
                       </Button>
+                      <GetQuoteModal>
                       <Button 
                         variant="outline" 
                         size="lg" 
@@ -166,6 +172,7 @@ export default function HeroSection() {
                       >
                         Contact Sales
                       </Button>
+                      </GetQuoteModal>
                     </div>
                   </motion.div>
                 </motion.div>
@@ -180,7 +187,7 @@ export default function HeroSection() {
                   exit={{ opacity: 0, scale: 0.9 }}
                 >
                   {/* Image Container */}
-                  <div className="relative h-full rounded-3xl overflow-hidden bg-gradient-to-br from-primary/50 to-primary/20 p-[2px] shadow-2xl">
+                  <div className="relative h-full rounded-3xl overflow-hidden bg-gradient-to-tr from-primary/30 dark:from-primary/20 dark:to-primary/0 to-primary/10 border p-[2px] shadow-2xl">
                     <div className="absolute inset-0 backdrop-blur-sm rounded-3xl" />
                     <div className="relative h-full rounded-3xl overflow-hidden group">
                       <img

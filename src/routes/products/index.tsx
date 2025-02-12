@@ -35,7 +35,7 @@ function RouteComponent() {
   );
 
   return (
-    <Container>
+    <Container className="my-10">
       <section className="relative py-20 md:py-28 overflow-hidden">
         <div className="absolute inset-0 bg-grid-slate-100/50 [mask-image:radial-gradient(ellipse_at_center,white,transparent)]" />
         <Container className="relative">
@@ -81,7 +81,7 @@ function RouteComponent() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}
-        className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 lg:gap-10"
+        className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10"
       >
         {filteredProducts.map((product) => (
           <ProductCard key={product.id} product={product} />

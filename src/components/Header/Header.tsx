@@ -70,7 +70,7 @@ export default function Header() {
                   className="relative group"
                   onClick={() => setShowContactInfo(!showContactInfo)}
                 >
-                  <span>Get Quote</span>
+                  <span>Contact</span>
                   <LucideChevronDown 
                     className={cn(
                       "ml-2 h-4 w-4 transition-transform duration-200",
@@ -127,9 +127,6 @@ export default function Header() {
                       </div>
 
                     </div>
-                    <Button className="w-full" variant="outline">
-                      Request Callback
-                    </Button>
                   </div>
                 </motion.div>
               </div>

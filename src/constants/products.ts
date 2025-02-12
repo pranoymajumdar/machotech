@@ -1,3 +1,8 @@
+import ProductImage1 from '@/assets/300 lmga.png';
+import ProductImage2 from '@/assets/1500DCTV.png';
+import ProductImage3 from '@/assets/850 dctv .png';
+
+
 export type Product = {
   id: string;
   name: string;
@@ -15,9 +20,9 @@ export const products: Product[] = [
     name: "Wireless Headphones",
     price: "contact for price",
     images: [
-      "https://picsum.photos/400/400?random=8374547856",
-      "https://picsum.photos/400/400?random=878645",
-      "https://picsum.photos/400/400?random=8451436"
+      ProductImage1,
+      ProductImage2,
+      ProductImage3,
     ],
     description: "High-quality wireless headphones with noise cancellation.",
     machineData: [

@@ -26,7 +26,7 @@ export function ProductCard({ product }: ProductCardProps) {
           <img
             src={product.images[0]}
             alt={product.name}
-            className="h-full w-full object-cover transition-all duration-700 group-hover:scale-110"
+            className="h-full w-full object-contain transition-all duration-700 group-hover:scale-110"
           />
           {/* Hover Overlay with Gradient */}
           <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/40 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" />

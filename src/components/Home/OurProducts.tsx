@@ -1,11 +1,13 @@
 import { motion } from "framer-motion";
-import { LucideArrowRight, LucideChevronRight, LucideEye } from "lucide-react";
+import {LucideChevronRight } from "lucide-react";
 import { Button } from "../ui/button";
 import { ProductCard } from "../ProductCard/ProductCard";
 import { products } from "@/constants/products";
+import { useRouter } from "@tanstack/react-router";
 
 
 export default function OurProducts() {
+  const router = useRouter();
   return (
     <section className="relative py-24">
       {/* Background Pattern */}
@@ -58,6 +60,9 @@ export default function OurProducts() {
             size="lg"
             variant="outline"
             className="group relative px-8 overflow-hidden"
+            onClick={() => router.navigate({
+              to: '/products'
+            })}
           >
             <span className="relative z-10">View All Products</span>
             <motion.div

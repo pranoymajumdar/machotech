@@ -1,9 +1,9 @@
 import HeroSection from "@/components/Products/HeroSection";
+import RelatedProducts from "@/components/Products/RelatedProducts";
 import Container from "@/components/ui/container";
 import { products } from "@/constants/products";
 import { createFileRoute } from "@tanstack/react-router";
-import { motion } from "framer-motion";
-import { useState } from "react";
+
 
 
 export const Route = createFileRoute("/products/$productId")({
@@ -16,9 +16,9 @@ function RouteComponent() {
   if (!product) return <h1>TODO: Not found error</h1>
 
   return (
-    <Container className="min-h-screen">
+    <Container className="min-h-screen my-10">
       <HeroSection product={product}/>
-      Something here
+      <RelatedProducts productId={product.id}/>
     </Container>
   )
 }

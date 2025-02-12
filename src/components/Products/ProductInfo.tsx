@@ -49,23 +49,17 @@ export default function ProductInfo({
   ];
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">{productName}</h1>
-
-      <p className="text-muted-foreground">
-        Experience cutting-edge technology with this Smart Watch, designed for
-        both industrial and personal applications. Featuring high durability,
-        efficient performance, and a sleek design.
-      </p>
+      <h1 className="text-3xl font-bold">Lorem ipsum dolor sit amet consectetur.</h1>
       <div className="grid space-y-1">
         <div className="flex justify-between items-center">
           <PriceSection productPrice={productPrice} />
           <GetQuoteModal>
-          <Button variant='outline'>Get Quote</Button>
+            <Button variant="outline">Get Quote</Button>
           </GetQuoteModal>
         </div>
-        <span className="text-sm text-muted-foreground">
+        {/* <span className="text-sm text-muted-foreground">
           Lorem ipsum dolor sit.
-        </span>
+        </span> */}
       </div>
       <Table>
         <TableHeader>
@@ -83,6 +77,11 @@ export default function ProductInfo({
           ))}
         </TableBody>
       </Table>
+      <p className="text-muted-foreground">
+        Experience cutting-edge technology with this Smart Watch, designed for
+        both industrial and personal applications. Featuring high durability,
+        efficient performance, and a sleek design.
+      </p>
     </div>
   );
 }

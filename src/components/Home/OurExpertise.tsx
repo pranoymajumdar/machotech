@@ -8,7 +8,6 @@ import {
   LucideShip,
   LucideTruck,
 } from "lucide-react";
-import { Button } from "../ui/button";
 
 const industries = [
   {
@@ -127,29 +126,6 @@ export default function OurExpertise() {
             </motion.div>
           ))}
         </div>
-
-        {/* CTA Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.6 }}
-          className="mt-16 text-center"
-        >
-          <Button 
-            size="lg" 
-            variant="outline"
-            className="group relative px-8 overflow-hidden"
-          >
-            <span className="relative z-10">Explore Applications</span>
-            <motion.div
-              initial={{ x: "-100%" }}
-              whileHover={{ x: "0%" }}
-              transition={{ duration: 0.3 }}
-              className="absolute inset-0 bg-primary/10"
-            />
-          </Button>
-        </motion.div>
       </div>
     </section>
   );
