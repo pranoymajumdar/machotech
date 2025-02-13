@@ -1,9 +1,7 @@
 import {LucideFlame} from 'lucide-react';
+import LogoPng from '@/assets/logo.png';
 export default function Logo() {
   return (
-    <div className="flex items-center justify-center">
-        <LucideFlame className='w-7 h-7'/>
-        <h2 className='text-xl font-semibold'>Mechotech</h2>
-    </div>
+    <img src={LogoPng} alt="" width={50} height={50} />
   )
 }

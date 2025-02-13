@@ -131,7 +131,6 @@ export default function HeroSection() {
                       </div>
                     ) : (
                       <div className="space-y-1">
-                        <span className="text-sm text-muted-foreground">Price</span>
                         <div className="flex items-center gap-3">
                           <div className="flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full">
                             <Phone className="h-4 w-4 text-primary" />
@@ -139,9 +138,6 @@ export default function HeroSection() {
                               Contact for Price
                             </span>
                           </div>
-                          <span className="text-sm text-muted-foreground">
-                            Get a custom quote
-                          </span>
                         </div>
                       </div>
                     )}

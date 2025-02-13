@@ -2,50 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
+
 @layer base {
   :root {
-    --background: 220 40% 98%;
-    --foreground: 220 20% 10%;
-    --card: 0 0% 100%;
-    --card-foreground: 220 15% 15%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 20% 15%;
-    --primary: 222 90% 55%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 220 15% 94%;
-    --secondary-foreground: 220 20% 15%;
-    --muted: 220 14% 92%;
-    --muted-foreground: 220 8% 45%;
-    --accent: 220 75% 55%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 75% 50%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 220 15% 85%;
-    --input: 220 15% 85%;
-    --ring: 222 90% 55%;
-    --radius: 0.75rem;
-  }
+    --background: 220 40% 98%; /* Light Grayish Background - keep as is for general background */
+    --foreground: 220 20% 10%; /* Dark Gray Foreground - keep as is for text */
+    --card: 0 0% 100%; /* White Card Background - keep as is */
+    --card-foreground: 220 15% 15%; /* Dark Gray Card Foreground - keep as is */
+    --popover: 0 0% 100%; /* White Popover Background - keep as is */
+    --popover-foreground: 220 20% 15%; /* Dark Gray Popover Foreground - keep as is */
 
-  .dark {
-    --background: 220 40% 8%;
-    --foreground: 220 20% 95%;
-    --card: 220 30% 10%;
-    --card-foreground: 220 20% 95%;
-    --popover: 220 30% 12%;
-    --popover-foreground: 220 20% 95%;
-    --primary: 222 80% 60%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 220 20% 15%;
-    --secondary-foreground: 220 20% 90%;
-    --muted: 220 15% 18%;
-    --muted-foreground: 220 10% 60%;
-    --accent: 220 80% 60%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 65% 45%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 220 15% 25%;
-    --input: 220 15% 25%;
-    --ring: 222 80% 60%;
+    /* --- RED PALETTE --- */
+    --primary: 350 90% 50%;       /* Vibrant Red for Primary Actions */
+    --primary-foreground: 0 0% 100%; /* White text on Primary Red */
+    --secondary: 0 20% 92%;      /* Very Light Red/Pink for Secondary Backgrounds */
+    --secondary-foreground: 350 20% 15%; /* Darker Reddish Gray for Secondary Text */
+    --muted: 0 15% 90%;          /* Light Reddish Gray for Muted Backgrounds */
+    --muted-foreground: 0 10% 50%;   /* Medium Reddish Gray for Muted Text */
+    --accent: 355 80% 55%;        /* Slightly different Red Accent Color */
+    --accent-foreground: 0 0% 100%;  /* White text on Accent Red */
+    --destructive: 0 80% 55%;     /* Stronger Red for Destructive Actions */
+    --destructive-foreground: 0 0% 100%; /* White text on Destructive Red */
+    --border: 0 15% 85%;          /* Light Reddish Border */
+    --input: 0 15% 85%;           /* Light Reddish Input Background */
+    --ring: 350 90% 50%;          /* Red Ring Color (matches primary) */
+    --radius: 0.75rem;
   }
 }
 

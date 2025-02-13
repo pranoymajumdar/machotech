@@ -22,8 +22,9 @@ const PriceSection = ({ productPrice }: { productPrice: Product["price"] }) => {
   }
 
   return (
-    <span className="inline-block text-2xl font-bold text-primary">
-      ₹ {productPrice.toLocaleString()}
+    <span className="inline-block space-x-1 text-2xl font-bold text-primary gap-2">
+      <span>₹ {productPrice.toLocaleString()}</span>
+      <span className="text-muted-foreground text-sm">{"(approx)"}</span>
     </span>
   );
 };
@@ -49,7 +50,7 @@ export default function ProductInfo({
   ];
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Lorem ipsum dolor sit amet consectetur.</h1>
+      <h1 className="text-3xl font-bold">{productName}</h1>
       <div className="grid space-y-1">
         <div className="flex justify-between items-center">
           <PriceSection productPrice={productPrice} />
