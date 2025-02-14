@@ -4,7 +4,6 @@ import { ChevronRight, ArrowRight, ArrowLeft, Phone } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
-import { TextScramble } from "@/components/ui/TextScramble";
 import { products as allProducts } from "@/constants/products";
 import GetQuoteModal from "../GetQuoteModal";
 
@@ -189,7 +188,7 @@ export default function HeroSection() {
                       <img
                         src={currentProduct.images[0]}
                         alt={currentProduct.name}
-                        className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                        className="h-full w-full object-contain object-center transition-transform duration-500 group-hover:scale-105"
                         loading="eager"
                       />
                       {/* Enhanced Overlay */}

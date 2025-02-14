@@ -35,10 +35,6 @@ export default function Header() {
         <Container className="max-w-7xl">
           <div className="flex items-center justify-between h-16">
             {/* Left Section */}
-            <div className="flex items-center gap-4">
-              <div className="lg:hidden">
-                <MobileNav />
-              </div>
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -46,7 +42,7 @@ export default function Header() {
               >
                 <Logo />
               </motion.div>
-            </div>
+
 
             {/* Center Navigation */}
             <div className="hidden lg:block">
@@ -127,6 +123,9 @@ export default function Header() {
                     </div>
                   </div>
                 </motion.div>
+              </div>
+              <div className="lg:hidden">
+                <MobileNav />
               </div>
             </motion.div>
           </div>
