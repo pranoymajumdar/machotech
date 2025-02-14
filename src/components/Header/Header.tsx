@@ -8,7 +8,6 @@ import Container from "../ui/container";
 import Logo from "./Logo";
 import MobileNav from "./MobileNav";
 import Nav from "./Nav";
-import ThemeToggle from "./ThemeToggle";
 
 export default function Header() {
   const { scrollY } = useScroll();
@@ -61,7 +60,6 @@ export default function Header() {
               transition={{ duration: 0.3, delay: 0.2 }}
               className="flex items-center gap-4"
             >
-              <ThemeToggle />
 
               {/* Contact Button with Dropdown */}
               <div className="hidden lg:block relative">

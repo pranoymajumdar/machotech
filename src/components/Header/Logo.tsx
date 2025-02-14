@@ -1,4 +1,3 @@
-import {LucideFlame} from 'lucide-react';
 import LogoPng from '@/assets/logo.png';
 export default function Logo() {
   return (
