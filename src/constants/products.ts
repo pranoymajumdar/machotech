@@ -11,9 +11,10 @@ export enum ProductCategory {
   AutomaticMachine = "Automatic Machine"
 }
 export type CategoryType = {
+  id: number;
   name: ProductCategory;
   description: String;
-  image: string;
+  imageUrl?: string;
 
 }
 export type Product = {
