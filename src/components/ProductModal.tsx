@@ -4,18 +4,13 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
-import { BASE_API_URL } from "@/constants/utils";
+import { BASE_API_URL, Category } from "@/constants/utils";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "./ui/select";
 import { Textarea } from "./ui/textarea";
 import { MultiSelect } from "./ui/multi-select";
 import { z } from "zod";
 import { Plus, X } from "lucide-react";
 
-export interface Category {
-  id: string;
-  name: string;
-  imageUrl: string;
-}
 
 export interface Product {
   id: number;

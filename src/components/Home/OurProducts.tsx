@@ -4,9 +4,8 @@ import { Button } from "../ui/button";
 import { useRouter } from "@tanstack/react-router";
 import CategoryCard from "./CategoryCard";
 import { useEffect, useState } from "react";
-import { BASE_API_URL } from "@/constants/utils";
+import { BASE_API_URL, Category } from "@/constants/utils";
 import { toast } from "sonner";
-import type { Category } from "@/components/ProductModal";
 
 export default function OurProducts() {
   const router = useRouter();
@@ -78,6 +77,7 @@ export default function OurProducts() {
                 <CategoryCard
                   id={category.id}
                   name={category.name}
+                  description={category.description}
                   imageUrl={category.imageUrl}
                 />
               </motion.div>

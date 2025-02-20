@@ -1,13 +1,8 @@
 import { Link } from "@tanstack/react-router";
-import { BASE_API_URL } from "@/constants/utils";
+import { BASE_API_URL, Category } from "@/constants/utils";
 
-interface CategoryCardProps {
-  id: string;
-  name: string;
-  imageUrl: string;
-}
 
-export default function CategoryCard({ id, name, imageUrl }: CategoryCardProps) {
+export default function CategoryCard({ id, name, imageUrl, description }: Category) {
   return (
     <Link 
       to="/category/$categoryId" 
@@ -19,6 +14,7 @@ export default function CategoryCard({ id, name, imageUrl }: CategoryCardProps) 
       <img src={BASE_API_URL + imageUrl} alt={name} className="rounded-md aspect-[16/9] object-contain" />
       <div className="space-y-2">
         <h2 className="font-semibold text-lg">{name}</h2>
+        <p className="text-sm text-muted-foreground">{description}</p>
       </div>
     </Link>
   )

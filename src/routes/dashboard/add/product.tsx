@@ -14,9 +14,8 @@ import { useState, useEffect } from "react";
 import { z } from "zod";
 import { Textarea } from "@/components/ui/textarea";
 import { useNavigate } from "@tanstack/react-router";
-import { BASE_API_URL } from "@/constants/utils";
+import { BASE_API_URL, Category } from "@/constants/utils";
 import { MultiSelect } from "@/components/ui/multi-select";
-import type { Category } from "@/components/ProductModal";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Plus, X } from "lucide-react";
 
@@ -277,9 +276,9 @@ function ImageUploadSection({
       return;
     }
     // Validate file sizes
-    const oversizedFiles = files.filter(file => file.size > 5 * 1024 * 1024);
+    const oversizedFiles = files.filter(file => file.size > 50 * 1024 * 1024);
     if (oversizedFiles.length > 0) {
-      toast.error('Some files exceed the 5MB size limit');
+      toast.error('Some files exceed the 50MB size limit');
       return;
     }
     setImages(files);
@@ -291,7 +290,7 @@ function ImageUploadSection({
 
   return (
     <div className="grid gap-2">
-      <Label htmlFor="images">Product Images (Max 10 images, 5MB each)</Label>
+      <Label htmlFor="images">Product Images (Max 10 images, 50MB each)</Label>
       <Input
         type="file"
         id="images"

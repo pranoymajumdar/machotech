@@ -12,9 +12,9 @@ import {
 import Container from "@/components/ui/container";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
-import { BASE_API_URL } from "@/constants/utils";
+import { BASE_API_URL, Category } from "@/constants/utils";
 import { toast } from "sonner";
-import { Category, CategoryEditModal } from "@/components/CategoryModal";
+import { CategoryEditModal } from "@/components/CategoryModal";
 
 export const Route = createFileRoute("/dashboard/categories")({
   component: RouteComponent,
@@ -23,7 +23,9 @@ export const Route = createFileRoute("/dashboard/categories")({
 function RouteComponent() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
+    null
+  );
 
   const handleOpenEditModal = (category: Category) => {
     setSelectedCategory(category);
@@ -38,7 +40,7 @@ function RouteComponent() {
 
   const handleCategoryUpdated = async () => {
     // Refresh categories list
-    fetchCategories()
+    fetchCategories();
   };
   const fetchCategories = async () => {
     try {
@@ -60,26 +62,28 @@ function RouteComponent() {
 
   const deleteCategory = async (id: number) => {
     try {
-        const apiUrl = new URL(`/categories/${id}`, BASE_API_URL).toString();
-        
-        const response = await fetch(apiUrl, {
-            method: "DELETE",
-            headers: { 'Content-Type': 'application/json'}
-        });
+      const apiUrl = new URL(`/categories/${id}`, BASE_API_URL).toString();
 
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => null);
-            throw new Error(errorData?.error || "Failed to delete category.");
-        }
+      const response = await fetch(apiUrl, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      });
 
-        const { message } = await response.json();
-        toast.success(message);
-        await fetchCategories()
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.error || "Failed to delete category.");
+      }
+
+      const { message } = await response.json();
+      toast.success(message);
+      await fetchCategories();
     } catch (error) {
-        console.error("Error deleting category:", error);
-        toast.error(error instanceof Error ? error.message : "Unexpected error occurred.");
+      console.error("Error deleting category:", error);
+      toast.error(
+        error instanceof Error ? error.message : "Unexpected error occurred."
+      );
     }
-};
+  };
 
   useEffect(() => {
     fetchCategories();
@@ -107,14 +111,34 @@ function RouteComponent() {
             <TableRow key={category.id}>
               <TableCell className="font-medium">{category.id}</TableCell>
               <TableCell>
-                <img src={new URL(category.imageUrl!, BASE_API_URL).toString()} alt={category.name} className="w-8 h-8 rounded object-contain" />
+                <img
+                  src={new URL(category.imageUrl!, BASE_API_URL).toString()}
+                  alt={category.name}
+                  className="w-8 h-8 rounded object-contain"
+                />
               </TableCell>
-              <TableCell>{category.name}</TableCell>
+              <TableCell>
+                <div>
+                  <div className="font-medium">{category.name}</div>
+                  <div className="text-sm text-muted-foreground line-clamp-1">
+                    {category.description}
+                  </div>
+                </div>
+              </TableCell>
               <TableCell className="text-right">
-                <Button size="sm" variant="outline" onClick={() => handleOpenEditModal(category)}>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => handleOpenEditModal(category)}
+                >
                   Edit
                 </Button>
-                <Button size="sm" variant="destructive" className="ml-2" onClick={() => deleteCategory(category.id)}>
+                <Button
+                  size="sm"
+                  variant="destructive"
+                  className="ml-2"
+                  onClick={() => deleteCategory(Number(category.id))}
+                >
                   Delete
                 </Button>
               </TableCell>
@@ -122,7 +146,7 @@ function RouteComponent() {
           ))}
         </TableBody>
       </Table>
-      <CategoryEditModal 
+      <CategoryEditModal
         isOpen={isEditModalOpen}
         onClose={handleCloseEditModal}
         category={selectedCategory}

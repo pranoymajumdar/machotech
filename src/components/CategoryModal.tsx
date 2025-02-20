@@ -5,14 +5,9 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
-import { BASE_API_URL } from '@/constants/utils';
+import { BASE_API_URL, Category } from '@/constants/utils';
 
-export interface Category {
-  id: number;
-  name: string;
-  description: string;
-  imageUrl: string;
-}
+
 
 interface CategoryEditModalProps {
   isOpen: boolean;
