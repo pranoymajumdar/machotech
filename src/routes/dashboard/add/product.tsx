@@ -18,6 +18,7 @@ import { BASE_API_URL } from "@/constants/utils";
 import { MultiSelect } from "@/components/ui/multi-select";
 import type { Category } from "@/components/ProductModal";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Plus, X } from "lucide-react";
 
 
 const productSchema = z.object({
@@ -45,29 +46,35 @@ function ProductInfoSection({
   setSelectedCategories: (categories: number[]) => void;
   isSubmitting: boolean;
 }) {
-  const [machineSpecs, setMachineSpecs] = useState({
-    brand: '',
-    model: '',
-    capacity: '',
-    motorRotationSpeed: '',
-    power: '',
-    coolingType: '',
-    chipConveyor: '',
-    overallSize: '',
-    weight: '',
-    countryOfOrigin: ''
-  });
+  const [machineSpecs, setMachineSpecs] = useState<Array<{ key: string; value: string }>>([]);
 
-  const handleSpecChange = (key: string, value: string) => {
-    setMachineSpecs(prev => {
-      const updated = { ...prev, [key]: value };
+  const addSpecification = () => {
+    setMachineSpecs([...machineSpecs, { key: '', value: '' }]);
+  };
+
+  const removeSpecification = (index: number) => {
+    setMachineSpecs(specs => specs.filter((_, i) => i !== index));
+  };
+
+  const updateSpecification = (index: number, field: 'key' | 'value', value: string) => {
+    setMachineSpecs(specs => {
+      const updated = specs.map((spec, i) => 
+        i === index ? { ...spec, [field]: value } : spec
+      );
+      
+      // Update product data with new specifications
       setProductData({
         ...productData,
         machineData: JSON.stringify({
-          specifications: updated,
+          specifications: Object.fromEntries(
+            updated
+              .filter(spec => spec.key.trim() !== '' && spec.value.trim() !== '')
+              .map(spec => [spec.key.trim(), spec.value.trim()])
+          ),
           categories: selectedCategories
         })
       });
+      
       return updated;
     });
   };
@@ -200,23 +207,54 @@ function ProductInfoSection({
         </div>
       </div>
 
-      <div className="grid gap-4">
-        <h3 className="text-lg font-medium">Machine Specifications</h3>
-        {Object.entries(machineSpecs).map(([key, value]) => (
-          <div key={key} className="grid gap-2">
-            <Label htmlFor={key}>
-              {key.replace(/([A-Z])/g, ' $1')
-                 .replace(/^./, str => str.toUpperCase())}
-            </Label>
-            <Input
-              id={key}
-              value={value}
-              onChange={(e) => handleSpecChange(key, e.target.value)}
-              disabled={isSubmitting}
-              placeholder={`Enter ${key.toLowerCase()}`}
-            />
-          </div>
-        ))}
+      {/* Machine Specifications */}
+      <div>
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-lg font-medium">Machine Specifications</h3>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={addSpecification}
+            disabled={isSubmitting}
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Add Specification
+          </Button>
+        </div>
+        
+        <div className="grid gap-4">
+          {machineSpecs.map((spec, index) => (
+            <div key={index} className="flex gap-4 items-start">
+              <div className="grid gap-2 flex-1">
+                <Input
+                  placeholder="Specification name"
+                  value={spec.key}
+                  onChange={(e) => updateSpecification(index, 'key', e.target.value)}
+                  disabled={isSubmitting}
+                />
+              </div>
+              <div className="grid gap-2 flex-1">
+                <Input
+                  placeholder="Value"
+                  value={spec.value}
+                  onChange={(e) => updateSpecification(index, 'value', e.target.value)}
+                  disabled={isSubmitting}
+                />
+              </div>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                onClick={() => removeSpecification(index)}
+                disabled={isSubmitting}
+                className="text-destructive hover:text-destructive"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -52,11 +52,32 @@ export default function HeroSection() {
       }
 
       const data = await response.json();
+      
+      // Filter hero products and sort by heroIndex
       const heroProducts = data
         .filter((product: Product) => product.showInHero)
-        .sort((a: Product, b: Product) => a.heroIndex - b.heroIndex);
+        .sort((a: Product, b: Product) => {
+          // If heroIndex is 0 or undefined, put at the end
+          if (!a.heroIndex && !b.heroIndex) return 0;
+          if (!a.heroIndex) return 1;
+          if (!b.heroIndex) return -1;
+          return a.heroIndex - b.heroIndex;
+        });
 
-      setProducts(heroProducts);
+      // Validate heroIndex uniqueness and sequence
+      const validatedProducts = heroProducts.map((product: Product, index: number) => {
+        // If heroIndex is missing or duplicate, assign new index + 1
+        if (!product.heroIndex || 
+            heroProducts.filter((p: Product) => p.heroIndex === product.heroIndex).length > 1) {
+          return {
+            ...product,
+            heroIndex: index + 1
+          };
+        }
+        return product;
+      });
+
+      setProducts(validatedProducts);
     } catch {
       setProducts([]);
     } finally {
@@ -111,7 +132,7 @@ export default function HeroSection() {
 
   return (
     <div className="relative md:pt-10 bg-background/95 flex items-center overflow-hidden">
-      {/* Modern Background */}
+
       <div className="absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-grid-small-black/[0.15] -z-10" />
         <div className="absolute h-full w-full">

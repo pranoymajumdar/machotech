@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger } from "./ui/select";
 import { Textarea } from "./ui/textarea";
 import { MultiSelect } from "./ui/multi-select";
 import { z } from "zod";
+import { Plus, X } from "lucide-react";
 
 export interface Category {
   id: string;
@@ -60,6 +61,11 @@ const productUpdateSchema = z.object({
   categoryIds: z.array(z.number())
 });
 
+interface SpecificationEntry {
+  key: string;
+  value: string;
+}
+
 export function ProductEditModal({
   isOpen,
   onClose,
@@ -67,26 +73,37 @@ export function ProductEditModal({
   onSuccess,
 }: ProductEditModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState<Partial<Product>>(product || {});
+  const [formData, setFormData] = useState<Partial<Product>>({});
   const [categories, setCategories] = useState<Category[]>([]);
-  const [selectedCategories, setSelectedCategories] = useState<number[]>(
-    product?.machineData?.categories || []
-  );
+  const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
+  const [machineSpecs, setMachineSpecs] = useState<SpecificationEntry[]>([]);
 
-  const [machineSpecs, setMachineSpecs] = useState({
-    brand: '',
-    model: '',
-    capacity: '',
-    motorRotationSpeed: '',
-    power: '',
-    coolingType: '',
-    chipConveyor: '',
-    overallSize: '',
-    weight: '',
-    countryOfOrigin: '',
-    ...product?.machineData?.specifications
-  });
+  // Initialize form data when modal opens or product changes
+  useEffect(() => {
+    if (product) {
+      setFormData({
+        name: product.name,
+        description: product.description,
+        price: product.price,
+        isContactForPrice: product.isContactForPrice,
+        showInHero: product.showInHero,
+        heroIndex: product.heroIndex,
+      });
 
+      // Convert specifications object to array of entries
+      const specs = product.machineData.specifications
+        ? Object.entries(product.machineData.specifications).map(([key, value]) => ({
+            key,
+            value: value as string,
+          }))
+        : [];
+      setMachineSpecs(specs);
+
+      setSelectedCategories(product.machineData.categories || []);
+    }
+  }, [product]);
+
+  // Fetch categories when modal opens
   useEffect(() => {
     if (isOpen) {
       fetchCategories();
@@ -105,11 +122,29 @@ export function ProductEditModal({
     }
   };
 
-  const handleSpecChange = (key: string, value: string) => {
-    setMachineSpecs(prev => ({
-      ...prev,
-      [key]: value
-    }));
+  // Reset form when modal closes
+  useEffect(() => {
+    if (!isOpen) {
+      setFormData({});
+      setSelectedCategories([]);
+      setMachineSpecs([]);
+    }
+  }, [isOpen]);
+
+  const addSpecification = () => {
+    setMachineSpecs([...machineSpecs, { key: '', value: '' }]);
+  };
+
+  const removeSpecification = (index: number) => {
+    setMachineSpecs(specs => specs.filter((_, i) => i !== index));
+  };
+
+  const updateSpecification = (index: number, field: 'key' | 'value', value: string) => {
+    setMachineSpecs(specs => 
+      specs.map((spec, i) => 
+        i === index ? { ...spec, [field]: value } : spec
+      )
+    );
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -121,7 +156,9 @@ export function ProductEditModal({
       const updatedMachineData = {
         ...product.machineData,
         specifications: Object.fromEntries(
-          Object.entries(machineSpecs).filter(([_, value]) => value !== '')
+          machineSpecs
+            .filter(spec => spec.key.trim() !== '' && spec.value.trim() !== '')
+            .map(spec => [spec.key.trim(), spec.value.trim()])
         ),
         categories: selectedCategories
       };
@@ -270,23 +307,50 @@ export function ProductEditModal({
             />
           </div>
           <div className="grid gap-4">
-            <Label>Machine Specifications</Label>
-            {Object.entries(machineSpecs)
-              .filter(([key]) => !['images', 'categories'].includes(key))
-              .map(([key, value]) => (
-                <div key={key} className="grid gap-2">
-                  <Label htmlFor={key}>
-                    {key.replace(/([A-Z])/g, ' $1')
-                       .replace(/^./, str => str.toUpperCase())}
-                  </Label>
+            <div className="flex items-center justify-between">
+              <Label>Machine Specifications</Label>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={addSpecification}
+                disabled={isSubmitting}
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Add Specification
+              </Button>
+            </div>
+            
+            {machineSpecs.map((spec, index) => (
+              <div key={index} className="flex gap-4 items-start">
+                <div className="grid gap-2 flex-1">
                   <Input
-                    id={key}
-                    value={value as string}
-                    onChange={(e) => handleSpecChange(key, e.target.value)}
+                    placeholder="Specification name"
+                    value={spec.key}
+                    onChange={(e) => updateSpecification(index, 'key', e.target.value)}
                     disabled={isSubmitting}
                   />
                 </div>
-              ))}
+                <div className="grid gap-2 flex-1">
+                  <Input
+                    placeholder="Value"
+                    value={spec.value}
+                    onChange={(e) => updateSpecification(index, 'value', e.target.value)}
+                    disabled={isSubmitting}
+                  />
+                </div>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => removeSpecification(index)}
+                  disabled={isSubmitting}
+                  className="text-destructive hover:text-destructive"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
           </div>
           <div className="flex justify-end gap-2">
             <Button type="button" variant="outline" onClick={onClose}>
