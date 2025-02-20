@@ -12,11 +12,11 @@ export default function CategoryCard({ id, name, imageUrl }: CategoryCardProps) 
     <Link 
       to="/category/$categoryId" 
       params={{
-        categoryId: id // Use name for the URL
+        categoryId: id 
       }} 
       className="flex flex-col gap-3"
     >
-      <img src={BASE_API_URL + imageUrl} alt={name} className="rounded-md" />
+      <img src={BASE_API_URL + imageUrl} alt={name} className="rounded-md aspect-[16/9] object-contain" />
       <div className="space-y-2">
         <h2 className="font-semibold text-lg">{name}</h2>
       </div>
