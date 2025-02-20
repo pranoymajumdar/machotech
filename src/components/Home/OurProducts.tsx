@@ -1,64 +1,43 @@
 import { motion } from "framer-motion";
 import { LucideChevronRight } from "lucide-react";
 import { Button } from "../ui/button";
-import { type CategoryType, ProductCategory } from "@/constants/products";
 import { useRouter } from "@tanstack/react-router";
 import CategoryCard from "./CategoryCard";
-
-function getRandomImage(): string {
-  const imageSources = [
-    "https://picsum.photos/200/150?random=1",
-    "https://picsum.photos/200/150?random=2",
-    "https://picsum.photos/200/150?random=3",
-    "https://picsum.photos/200/150?random=4",
-    "https://picsum.photos/200/150?random=5",
-    "https://picsum.photos/200/150?random=6",
-  ];
-  return imageSources[Math.floor(Math.random() * imageSources.length)];
-}
-
-const categories: CategoryType[] = [
-  {
-    name: ProductCategory.AutomaticMachine,
-    description:
-      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Deserunt, quam?",
-    image: getRandomImage(),
-  },
-  {
-    name: ProductCategory.CircularSawMachine,
-    description: "Information about circular saw machines.",
-    image: getRandomImage(),
-  },
-  {
-    name: ProductCategory.HorizontalBandsawMachine,
-    description: "Details on horizontal bandsaw machines.",
-    image: getRandomImage(),
-  },
-  {
-    name: ProductCategory.SpareParts,
-    description: "Explore our range of spare parts.",
-    image: getRandomImage(),
-  },
-  {
-    name: ProductCategory.SpecialPurposeMachine,
-    description: "Learn about our special purpose machines.",
-    image: getRandomImage(),
-  },
-  {
-    name: ProductCategory.VerticalBandsawMachine,
-    description: "Description of vertical bandsaw machines.",
-    image: getRandomImage(),
-  },
-];
+import { useEffect, useState } from "react";
+import { BASE_API_URL } from "@/constants/utils";
+import { toast } from "sonner";
+import type { Category } from "@/components/ProductModal";
 
 export default function OurProducts() {
   const router = useRouter();
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch(new URL('/categories', BASE_API_URL).toString());
+      if (!response.ok) throw new Error('Failed to fetch categories');
+      const data = await response.json();
+      setCategories(data);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+      toast.error('Failed to load categories');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <section className="relative py-24">
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-grid-slate-100/50 [mask-image:radial-gradient(ellipse_at_center,white,transparent)] pointer-events-none" />
       <div className="container relative px-4 mx-auto">
-        {/* Section Header - Updated to match About Section */}
+        {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -76,20 +55,38 @@ export default function OurProducts() {
           </p>
         </motion.div>
 
-        {/* Products Grid */}
+        {/* Categories Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {categories.map((category, index) => (
-            <motion.div
-              key={category.name}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="group h-full"
-            >
-              <CategoryCard {...category} />
-            </motion.div>
-          ))}
+          {isLoading ? (
+            // Loading skeleton
+            Array(6).fill(0).map((_, index) => (
+              <div 
+                key={index} 
+                className="h-[300px] rounded-lg bg-muted animate-pulse"
+              />
+            ))
+          ) : categories.length > 0 ? (
+            categories.map((category, index) => (
+              <motion.div
+                key={category.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="group h-full"
+              >
+                <CategoryCard
+                  id={category.id}
+                  name={category.name}
+                  imageUrl={category.imageUrl}
+                />
+              </motion.div>
+            ))
+          ) : (
+            <div className="col-span-full text-center text-muted-foreground">
+              No categories found
+            </div>
+          )}
         </div>
 
         {/* View All Button */}

@@ -1,4 +1,4 @@
-import { Product } from "@/constants/products";
+import type { Product } from "@/components/ProductModal";
 import {
   Table,
   TableBody,
@@ -11,8 +11,8 @@ import { LucidePhoneCall } from "lucide-react";
 import { Button } from "../ui/button";
 import GetQuoteModal from "../GetQuoteModal";
 
-const PriceSection = ({ productPrice }: { productPrice: Product["price"] }) => {
-  if (productPrice === "contact for price") {
+const PriceSection = ({ product }: { product: Product }) => {
+  if (product.isContactForPrice || !product.price) {
     return (
       <span className="flex items-center gap-4 text-primary text-2xl font-bold">
         <LucidePhoneCall />
@@ -23,66 +23,60 @@ const PriceSection = ({ productPrice }: { productPrice: Product["price"] }) => {
 
   return (
     <span className="inline-block space-x-1 text-2xl font-bold text-primary gap-2">
-      <span>₹ {productPrice.toLocaleString()}</span>
+      <span>₹ {Number(product.price).toLocaleString()}</span>
       <span className="text-muted-foreground text-sm">{"(approx)"}</span>
     </span>
   );
 };
 
-export default function ProductInfo({
-  productName,
-  productPrice,
-}: {
-  productName: Product["name"];
-  productPrice: Product["price"];
-}) {
-  const machineData = [
-    ["Brand", "Mechotech"],
-    ["Model", "CSM 100"],
-    ["Capacity", "Dia. 100 mm"],
-    ["Motor Rotation Speed", "160 Mtrs./Min."],
-    ["Power", "20 Hp"],
-    ["Cooling Type", "Micromist"],
-    ["Automatic Chip Conveyor", "Motorized Screw type Swarf Conveyor"],
-    ["Overall Size in mm", "2500 x 2700 x 1900 mm"],
-    ["Approx Weight in Kg", "5400 Kgs"],
-    ["Country of Origin", "Made in India"],
-  ];
+interface ProductInfoProps {
+  product: Product;
+}
+
+export default function ProductInfo({ product }: ProductInfoProps) {
+  const specifications = product.machineData.specifications || {};
+  
+  const specEntries = Object.entries(specifications)
+    .filter(([key]) => !['images', 'categories'].includes(key))
+    .map(([key, value]) => ({
+      key: key.replace(/([A-Z])/g, ' $1')
+         .replace(/_/g, ' ')
+         .replace(/^./, str => str.toUpperCase()),
+      value: value || ''
+    }));
+
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">{productName}</h1>
+      <h1 className="text-3xl font-bold">{product.name}</h1>
       <div className="grid space-y-1">
         <div className="flex justify-between items-center">
-          <PriceSection productPrice={productPrice} />
+          <PriceSection product={product} />
           <GetQuoteModal>
             <Button variant="outline">Get Quote</Button>
           </GetQuoteModal>
         </div>
-        {/* <span className="text-sm text-muted-foreground">
-          Lorem ipsum dolor sit.
-        </span> */}
       </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Usage/Application</TableHead>
-            <TableHead>Industrial</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {machineData.map((row) => (
-            <TableRow key={row[0]}>
-              <TableCell className="font-medium">{row[0]}</TableCell>
-              <TableCell>{row[1]}</TableCell>
+      
+      {specEntries.length > 0 && (
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Specification</TableHead>
+              <TableHead>Value</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <p className="text-muted-foreground">
-        Experience cutting-edge technology with this Smart Watch, designed for
-        both industrial and personal applications. Featuring high durability,
-        efficient performance, and a sleek design.
-      </p>
+          </TableHeader>
+          <TableBody>
+            {specEntries.map(({ key, value }) => (
+              <TableRow key={key}>
+                <TableCell className="font-medium">{key}</TableCell>
+                <TableCell>{value}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
+
+      <p className="text-muted-foreground">{product.description}</p>
     </div>
   );
 }

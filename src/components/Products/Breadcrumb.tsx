@@ -6,8 +6,8 @@ export default function Breadcrumb({
   productId,
   productName,
 }: {
-  productId: Product["id"];
-  productName: Product["name"];
+  productId: string;
+  productName: string;
 }) {
   return (
     <div className="flex items-center gap-2 text-sm text-muted-foreground mb-8">

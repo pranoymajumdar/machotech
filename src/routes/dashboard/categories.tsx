@@ -12,17 +12,34 @@ import {
 import Container from "@/components/ui/container";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
-import { CategoryType } from "@/constants/products";
 import { BASE_API_URL } from "@/constants/utils";
 import { toast } from "sonner";
+import { Category, CategoryEditModal } from "@/components/CategoryModal";
 
 export const Route = createFileRoute("/dashboard/categories")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const [categories, setCategories] = useState<CategoryType[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
 
+  const handleOpenEditModal = (category: Category) => {
+    setSelectedCategory(category);
+    setIsEditModalOpen(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+    // Allow animation to complete before clearing selection
+    setTimeout(() => setSelectedCategory(null), 300);
+  };
+
+  const handleCategoryUpdated = async () => {
+    // Refresh categories list
+    fetchCategories()
+  };
   const fetchCategories = async () => {
     try {
       const apiUrl = new URL("/categories", BASE_API_URL).toString();
@@ -94,7 +111,7 @@ function RouteComponent() {
               </TableCell>
               <TableCell>{category.name}</TableCell>
               <TableCell className="text-right">
-                <Button size="sm" variant="outline">
+                <Button size="sm" variant="outline" onClick={() => handleOpenEditModal(category)}>
                   Edit
                 </Button>
                 <Button size="sm" variant="destructive" className="ml-2" onClick={() => deleteCategory(category.id)}>
@@ -105,6 +122,12 @@ function RouteComponent() {
           ))}
         </TableBody>
       </Table>
+      <CategoryEditModal 
+        isOpen={isEditModalOpen}
+        onClose={handleCloseEditModal}
+        category={selectedCategory}
+        onSuccess={handleCategoryUpdated}
+      />
     </Container>
   );
 }

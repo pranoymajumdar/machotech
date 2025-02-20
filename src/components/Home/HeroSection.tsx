@@ -4,22 +4,75 @@ import { ChevronRight, ArrowRight, ArrowLeft, Phone } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
-import { products as allProducts } from "@/constants/products";
 import GetQuoteModal from "../GetQuoteModal";
+import { BASE_API_URL } from "@/constants/utils";
 
-const products = allProducts.filter((product) => product.featured);
+interface Category {
+  id: number;
+  name: string;
+  imageUrl: string;
+}
+
+interface Product {
+  id: number;
+  name: string;
+  description: string;
+  price: string | null;
+  isContactForPrice: boolean;
+  machineData: {
+    specifications?: Record<string, string>;
+    images?: string[];
+    categories?: number[];
+  };
+  showInHero: boolean;
+  heroIndex: number;
+  categories: Category[];
+}
 
 export default function HeroSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  
   const currentProduct = products[currentIndex];
 
   useEffect(() => {
+    fetchHeroProducts();
+  }, []);
+
+  const fetchHeroProducts = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch(
+        new URL('/products', BASE_API_URL).toString()
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch hero products');
+      }
+
+      const data = await response.json();
+      const heroProducts = data
+        .filter((product: Product) => product.showInHero)
+        .sort((a: Product, b: Product) => a.heroIndex - b.heroIndex);
+
+      setProducts(heroProducts);
+    } catch {
+      setProducts([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (products.length === 0) return;
+
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % products.length);
-    }, 5000000);
+    }, 5000);
 
     return () => clearInterval(timer);
-  }, [currentIndex]);
+  }, [products.length]);
 
   const handleNavigation = (direction: "prev" | "next") => {
     setCurrentIndex((prev) => {
@@ -33,6 +86,28 @@ export default function HeroSection() {
   const handleDotClick = (index: number) => {
     setCurrentIndex(index);
   };
+
+  if (isLoading || !currentProduct) {
+    return (
+      <div className="relative md:pt-10 bg-background/95 flex items-center overflow-hidden min-h-[600px]">
+        <div className="absolute inset-0 -z-10">
+          <div className="absolute inset-0 bg-grid-small-black/[0.15] -z-10" />
+          <div className="absolute h-full w-full">
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/20 rounded-full blur-3xl" />
+            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-3xl" />
+          </div>
+          <div className="absolute inset-0 bg-background/80 backdrop-blur-3xl" />
+        </div>
+        <div className="container flex items-center justify-center">
+          <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+        </div>
+      </div>
+    );
+  }
+
+  if (products.length === 0) {
+    return null;
+  }
 
   return (
     <div className="relative md:pt-10 bg-background/95 flex items-center overflow-hidden">
@@ -118,12 +193,12 @@ export default function HeroSection() {
                     transition={{ delay: 0.5 }}
                   >
                     {/* Price Display */}
-                    {typeof currentProduct.price === "number" ? (
+                    {!currentProduct.isContactForPrice && currentProduct.price ? (
                       <div className="space-y-1">
                         <span className="text-sm text-muted-foreground">Starting from</span>
                         <div className="flex items-baseline gap-2">
                           <span className="text-4xl font-bold">
-                            ₹{currentProduct.price.toLocaleString()}
+                            ₹{Number(currentProduct.price).toLocaleString()}
                           </span>
                           <span className="text-muted-foreground">onwards</span>
                         </div>
@@ -148,7 +223,7 @@ export default function HeroSection() {
                         size="lg"
                         className="text-lg group relative overflow-hidden"
                       >
-                        <Link params={{ productId: currentProduct.id }} to="/products/$productId">
+                        <Link params={{ productId: currentProduct.id.toString() }} to="/products/$productId">
                           View Product
                           <motion.div
                             className="absolute inset-0 bg-primary/20"
@@ -160,13 +235,13 @@ export default function HeroSection() {
                         </Link>
                       </Button>
                       <GetQuoteModal>
-                      <Button 
-                        variant="outline" 
-                        size="lg" 
-                        className="text-lg"
-                      >
-                        Contact Sales
-                      </Button>
+                        <Button 
+                          variant="outline" 
+                          size="lg" 
+                          className="text-lg"
+                        >
+                          Contact Sales
+                        </Button>
                       </GetQuoteModal>
                     </div>
                   </motion.div>
@@ -186,7 +261,7 @@ export default function HeroSection() {
                     <div className="absolute inset-0 backdrop-blur-sm rounded-3xl" />
                     <div className="relative h-full rounded-3xl overflow-hidden group">
                       <img
-                        src={currentProduct.images[0]}
+                        src={BASE_API_URL + currentProduct.machineData.images?.[0]}
                         alt={currentProduct.name}
                         className="h-full w-full object-contain object-center transition-transform duration-500 group-hover:scale-105"
                         loading="eager"
