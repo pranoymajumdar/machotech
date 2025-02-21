@@ -2,7 +2,6 @@ import { buttonVariants } from '@/components/ui/button'
 import Container from '@/components/ui/container'
 import { cn } from '@/lib/utils'
 import { createFileRoute, Link } from '@tanstack/react-router'
-import {AuthProvider} from "@/contexts/AuthContext"
 
 export const Route = createFileRoute('/dashboard/')({
   component: DashboardPage,
@@ -10,7 +9,6 @@ export const Route = createFileRoute('/dashboard/')({
 
 function DashboardPage() {
   return (
-    <AuthProvider>
       <Container className="my-10">
         <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -30,6 +28,5 @@ function DashboardPage() {
           </div>
         </div>
       </Container>
-    </AuthProvider>
   )
 }

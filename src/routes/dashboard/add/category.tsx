@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/card";
 import Container from "@/components/ui/container";
 import { BASE_API_URL } from "@/constants/utils";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Upload, ImageIcon } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";

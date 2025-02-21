@@ -15,7 +15,6 @@ import { useEffect, useState } from "react";
 import { BASE_API_URL, Category } from "@/constants/utils";
 import { toast } from "sonner";
 import { CategoryEditModal } from "@/components/CategoryModal";
-import {AuthProvider} from "@/contexts/AuthContext"
 import { getAuthHeaders } from "@/lib/auth";
 export const Route = createFileRoute("/dashboard/categories")({
   component: RouteComponent,
@@ -91,7 +90,6 @@ function RouteComponent() {
   }, []);
 
   return (
-    <AuthProvider>
       <Container className="p-4">
         <h1 className="text-2xl font-bold mb-4">Manage Categories</h1>
         <div className="mb-4">
@@ -156,6 +154,5 @@ function RouteComponent() {
           onSuccess={handleCategoryUpdated}
         />
       </Container>
-    </AuthProvider>
   );
 }

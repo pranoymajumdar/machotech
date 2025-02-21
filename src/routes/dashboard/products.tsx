@@ -16,7 +16,6 @@ import { BASE_API_URL } from "@/constants/utils";
 import { toast } from "sonner";
 import { ProductEditModal, type Product } from "@/components/ProductModal";
 import { getAuthHeaders } from "@/lib/auth";
-import {AuthProvider} from "@/contexts/AuthContext"
 export const Route = createFileRoute("/dashboard/products")({
   component: RouteComponent,
 });
@@ -92,7 +91,6 @@ function RouteComponent() {
   }, []);
 
   return (
-    <AuthProvider>
       <Container className="p-4">
         <h1 className="text-2xl font-bold mb-4">Manage Products</h1>
         <div className="mb-4">
@@ -178,6 +176,5 @@ function RouteComponent() {
           onSuccess={handleProductUpdated}
         />
       </Container>
-    </AuthProvider>
   );
 }

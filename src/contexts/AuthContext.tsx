@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { getAuthToken, getUser, clearAuth } from "@/lib/auth";
-import { useNavigate } from "@tanstack/react-router";
+import { useLocation, useNavigate } from "@tanstack/react-router";
 
 interface User {
   id: number;
@@ -19,6 +19,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(getUser());
   const navigate = useNavigate();
+  const location = useLocation();
 
   const login = (token: string, userData: User) => {
     localStorage.setItem('token', token);
@@ -37,7 +38,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const token = getAuthToken();
     const userData = getUser();
 
-    if (!token || !userData) {
+    if (!token || !userData && location.href.includes('dashboard')) {
       logout();
     } else {
       setUser(userData);
