@@ -27,7 +27,7 @@ import { useState, useEffect } from "react";
 import { Upload, ImageIcon } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
-import { getAuthHeadersForFormData, isAuthenticated } from "@/lib/auth";
+import { getAuthHeadersForFormData } from "@/lib/auth";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
