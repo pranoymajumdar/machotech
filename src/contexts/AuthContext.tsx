@@ -22,8 +22,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const location = useLocation();
 
   const login = (token: string, userData: User) => {
-    localStorage.setItem('token', token);
-    localStorage.setItem('user', JSON.stringify(userData));
+    localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(userData));
     setUser(userData);
   };
 
@@ -38,8 +38,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const token = getAuthToken();
     const userData = getUser();
 
-    if (!token || !userData && location.href.includes('dashboard')) {
-      logout();
+    if (!token || !userData) {
+      if (location.href.includes("dashboard")) {
+        logout();
+      }
     } else {
       setUser(userData);
     }
@@ -61,4 +63,4 @@ export function useAuth() {
     throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
-} 
+}
