@@ -129,17 +129,6 @@ function LoginPage() {
             </form>
           </Form>
         </CardContent>
-        <CardFooter className="flex flex-col space-y-4">
-          <div className="text-sm text-muted-foreground text-center">
-            Don't have an account?{" "}
-            <Link
-              to="/dashboard/auth/register"
-              className="text-primary underline-offset-4 hover:underline"
-            >
-              Register
-            </Link>
-          </div>
-        </CardFooter>
       </Card>
     </div>
   );
