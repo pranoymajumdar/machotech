@@ -15,7 +15,8 @@ import { useEffect, useState } from "react";
 import { BASE_API_URL, Category } from "@/constants/utils";
 import { toast } from "sonner";
 import { CategoryEditModal } from "@/components/CategoryModal";
-
+import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { getAuthHeaders } from "@/lib/auth";
 export const Route = createFileRoute("/dashboard/categories")({
   component: RouteComponent,
 });
@@ -66,7 +67,7 @@ function RouteComponent() {
 
       const response = await fetch(apiUrl, {
         method: "DELETE",
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders(),
       });
 
       if (!response.ok) {
@@ -88,70 +89,73 @@ function RouteComponent() {
   useEffect(() => {
     fetchCategories();
   }, []);
+
   return (
-    <Container className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Manage Categories</h1>
-      <div className="mb-4">
-        <Link className={cn(buttonVariants())} to="/dashboard/add/category">
-          Add Category
-        </Link>
-      </div>
-      <Table>
-        <TableCaption>A list of your categories.</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[100px]">ID</TableHead>
-            <TableHead>Image</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {categories.map((category) => (
-            <TableRow key={category.id}>
-              <TableCell className="font-medium">{category.id}</TableCell>
-              <TableCell>
-                <img
-                  src={new URL(category.imageUrl!, BASE_API_URL).toString()}
-                  alt={category.name}
-                  className="w-8 h-8 rounded object-contain"
-                />
-              </TableCell>
-              <TableCell>
-                <div>
-                  <div className="font-medium">{category.name}</div>
-                  <div className="text-sm text-muted-foreground line-clamp-1">
-                    {category.description}
-                  </div>
-                </div>
-              </TableCell>
-              <TableCell className="text-right">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => handleOpenEditModal(category)}
-                >
-                  Edit
-                </Button>
-                <Button
-                  size="sm"
-                  variant="destructive"
-                  className="ml-2"
-                  onClick={() => deleteCategory(Number(category.id))}
-                >
-                  Delete
-                </Button>
-              </TableCell>
+    <ProtectedRoute>
+      <Container className="p-4">
+        <h1 className="text-2xl font-bold mb-4">Manage Categories</h1>
+        <div className="mb-4">
+          <Link className={cn(buttonVariants())} to="/dashboard/add/category">
+            Add Category
+          </Link>
+        </div>
+        <Table>
+          <TableCaption>A list of your categories.</TableCaption>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[100px]">ID</TableHead>
+              <TableHead>Image</TableHead>
+              <TableHead>Name</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <CategoryEditModal
-        isOpen={isEditModalOpen}
-        onClose={handleCloseEditModal}
-        category={selectedCategory}
-        onSuccess={handleCategoryUpdated}
-      />
-    </Container>
+          </TableHeader>
+          <TableBody>
+            {categories.map((category) => (
+              <TableRow key={category.id}>
+                <TableCell className="font-medium">{category.id}</TableCell>
+                <TableCell>
+                  <img
+                    src={new URL(category.imageUrl!, BASE_API_URL).toString()}
+                    alt={category.name}
+                    className="w-8 h-8 rounded object-contain"
+                  />
+                </TableCell>
+                <TableCell>
+                  <div>
+                    <div className="font-medium">{category.name}</div>
+                    <div className="text-sm text-muted-foreground line-clamp-1">
+                      {category.description}
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell className="text-right">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleOpenEditModal(category)}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="destructive"
+                    className="ml-2"
+                    onClick={() => deleteCategory(Number(category.id))}
+                  >
+                    Delete
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        <CategoryEditModal
+          isOpen={isEditModalOpen}
+          onClose={handleCloseEditModal}
+          category={selectedCategory}
+          onSuccess={handleCategoryUpdated}
+        />
+      </Container>
+    </ProtectedRoute>
   );
 }

@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
 import { BASE_API_URL, Category } from '@/constants/utils';
-
+import { getAuthHeaders } from '@/lib/auth';
 
 
 interface CategoryEditModalProps {
@@ -30,7 +30,7 @@ export const CategoryEditModal = ({ isOpen, onClose, category, onSuccess }: Cate
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Initialize form data when category changes
+
   useEffect(() => {
     if (category) {
       setFormData({
@@ -79,6 +79,7 @@ export const CategoryEditModal = ({ isOpen, onClose, category, onSuccess }: Cate
       const response = await fetch(new URL(`/categories/${category.id}`, BASE_API_URL).toString(), {
         method: 'PUT',
         body: formPayload,
+        headers: getAuthHeaders(),
       });
       
       

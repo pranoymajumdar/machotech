@@ -18,7 +18,8 @@ import { BASE_API_URL, Category } from "@/constants/utils";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Plus, X } from "lucide-react";
-
+import { getAuthHeaders } from "@/lib/auth";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 const productSchema = z.object({
   name: z.string().min(3, "Name must be at least 3 characters").max(100),
@@ -36,7 +37,7 @@ function ProductInfoSection({
   categories,
   selectedCategories,
   setSelectedCategories,
-  isSubmitting
+  isSubmitting,
 }: {
   productData: z.infer<typeof productSchema>;
   setProductData: (data: z.infer<typeof productSchema>) => void;
@@ -45,35 +46,43 @@ function ProductInfoSection({
   setSelectedCategories: (categories: number[]) => void;
   isSubmitting: boolean;
 }) {
-  const [machineSpecs, setMachineSpecs] = useState<Array<{ key: string; value: string }>>([]);
+  const [machineSpecs, setMachineSpecs] = useState<
+    Array<{ key: string; value: string }>
+  >([]);
 
   const addSpecification = () => {
-    setMachineSpecs([...machineSpecs, { key: '', value: '' }]);
+    setMachineSpecs([...machineSpecs, { key: "", value: "" }]);
   };
 
   const removeSpecification = (index: number) => {
-    setMachineSpecs(specs => specs.filter((_, i) => i !== index));
+    setMachineSpecs((specs) => specs.filter((_, i) => i !== index));
   };
 
-  const updateSpecification = (index: number, field: 'key' | 'value', value: string) => {
-    setMachineSpecs(specs => {
-      const updated = specs.map((spec, i) => 
+  const updateSpecification = (
+    index: number,
+    field: "key" | "value",
+    value: string
+  ) => {
+    setMachineSpecs((specs) => {
+      const updated = specs.map((spec, i) =>
         i === index ? { ...spec, [field]: value } : spec
       );
-      
+
       // Update product data with new specifications
       setProductData({
         ...productData,
         machineData: JSON.stringify({
           specifications: Object.fromEntries(
             updated
-              .filter(spec => spec.key.trim() !== '' && spec.value.trim() !== '')
-              .map(spec => [spec.key.trim(), spec.value.trim()])
+              .filter(
+                (spec) => spec.key.trim() !== "" && spec.value.trim() !== ""
+              )
+              .map((spec) => [spec.key.trim(), spec.value.trim()])
           ),
-          categories: selectedCategories
-        })
+          categories: selectedCategories,
+        }),
       });
-      
+
       return updated;
     });
   };
@@ -133,7 +142,7 @@ function ProductInfoSection({
         <h3 className="text-lg font-medium mb-3">Categories</h3>
         <div className="grid gap-2">
           <MultiSelect
-            options={categories.map(cat => ({
+            options={categories.map((cat) => ({
               value: String(cat.id),
               label: cat.name,
             }))}
@@ -156,12 +165,14 @@ function ProductInfoSection({
                 setProductData({
                   ...productData,
                   isContactForPrice: checked === true,
-                  price: checked === true ? "" : productData.price
+                  price: checked === true ? "" : productData.price,
                 })
               }
               disabled={isSubmitting}
             />
-            <Label htmlFor="isContactForPrice">Hide price and show "Contact for Price"</Label>
+            <Label htmlFor="isContactForPrice">
+              Hide price and show "Contact for Price"
+            </Label>
           </div>
         </div>
       </div>
@@ -179,7 +190,7 @@ function ProductInfoSection({
                   setProductData({
                     ...productData,
                     showInHero: checked === true,
-                    heroIndex: checked === true ? productData.heroIndex : 0
+                    heroIndex: checked === true ? productData.heroIndex : 0,
                   })
                 }
                 disabled={isSubmitting}
@@ -197,7 +208,7 @@ function ProductInfoSection({
               onChange={(e) =>
                 setProductData({
                   ...productData,
-                  heroIndex: Number(e.target.value)
+                  heroIndex: Number(e.target.value),
                 })
               }
               disabled={isSubmitting || !productData.showInHero}
@@ -221,7 +232,7 @@ function ProductInfoSection({
             Add Specification
           </Button>
         </div>
-        
+
         <div className="grid gap-4">
           {machineSpecs.map((spec, index) => (
             <div key={index} className="flex gap-4 items-start">
@@ -229,7 +240,9 @@ function ProductInfoSection({
                 <Input
                   placeholder="Specification name"
                   value={spec.key}
-                  onChange={(e) => updateSpecification(index, 'key', e.target.value)}
+                  onChange={(e) =>
+                    updateSpecification(index, "key", e.target.value)
+                  }
                   disabled={isSubmitting}
                 />
               </div>
@@ -237,7 +250,9 @@ function ProductInfoSection({
                 <Input
                   placeholder="Value"
                   value={spec.value}
-                  onChange={(e) => updateSpecification(index, 'value', e.target.value)}
+                  onChange={(e) =>
+                    updateSpecification(index, "value", e.target.value)
+                  }
                   disabled={isSubmitting}
                 />
               </div>
@@ -262,7 +277,7 @@ function ProductInfoSection({
 function ImageUploadSection({
   images,
   setImages,
-  isSubmitting
+  isSubmitting,
 }: {
   images: File[];
   setImages: (files: File[]) => void;
@@ -272,13 +287,13 @@ function ImageUploadSection({
     const files = Array.from(e.target.files || []);
     // Validate file count
     if (files.length > 10) {
-      toast.error('Maximum 10 images allowed');
+      toast.error("Maximum 10 images allowed");
       return;
     }
     // Validate file sizes
-    const oversizedFiles = files.filter(file => file.size > 50 * 1024 * 1024);
+    const oversizedFiles = files.filter((file) => file.size > 50 * 1024 * 1024);
     if (oversizedFiles.length > 0) {
-      toast.error('Some files exceed the 50MB size limit');
+      toast.error("Some files exceed the 50MB size limit");
       return;
     }
     setImages(files);
@@ -331,15 +346,17 @@ function RouteComponent() {
   const [images, setImages] = useState<File[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
-  const [productData, setProductData] = useState<z.infer<typeof productSchema>>({
-    name: "",
-    description: "",
-    price: "",
-    isContactForPrice: true,
-    machineData: JSON.stringify({}),
-    showInHero: false,
-    heroIndex: 0,
-  });
+  const [productData, setProductData] = useState<z.infer<typeof productSchema>>(
+    {
+      name: "",
+      description: "",
+      price: "",
+      isContactForPrice: true,
+      machineData: JSON.stringify({}),
+      showInHero: false,
+      heroIndex: 0,
+    }
+  );
 
   // Fetch categories on mount
   useEffect(() => {
@@ -348,13 +365,15 @@ function RouteComponent() {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch(new URL('/categories', BASE_API_URL).toString());
-      if (!response.ok) throw new Error('Failed to fetch categories');
+      const response = await fetch(
+        new URL("/categories", BASE_API_URL).toString()
+      );
+      if (!response.ok) throw new Error("Failed to fetch categories");
       const data = await response.json();
       setCategories(data);
     } catch (error) {
-      console.error('Error fetching categories:', error);
-      toast.error('Failed to load categories');
+      console.error("Error fetching categories:", error);
+      toast.error("Failed to load categories");
     }
   };
 
@@ -365,51 +384,61 @@ function RouteComponent() {
     try {
       // Validate the data
       const validatedData = productSchema.parse(productData);
-
       // Create FormData
       const formData = new FormData();
-      formData.append('name', validatedData.name);
-      formData.append('description', validatedData.description);
-      formData.append('price', validatedData.price || '');
-      formData.append('isContactForPrice', String(validatedData.isContactForPrice));
-      formData.append('showInHero', String(validatedData.showInHero));
-      formData.append('heroIndex', String(validatedData.heroIndex));
+      formData.append("name", validatedData.name);
+      formData.append("description", validatedData.description);
+      formData.append("price", validatedData.price || "");
+      formData.append(
+        "isContactForPrice",
+        String(validatedData.isContactForPrice)
+      );
+      formData.append("showInHero", String(validatedData.showInHero));
+      formData.append("heroIndex", String(validatedData.heroIndex));
 
       // Add machine data with specifications and categories
       const machineDataObj = {
         specifications: JSON.parse(validatedData.machineData).specifications,
-        categories: selectedCategories
+        categories: selectedCategories,
       };
-      formData.append('machineData', JSON.stringify(machineDataObj));
+      formData.append("machineData", JSON.stringify(machineDataObj));
 
       // Add category IDs
-      formData.append('categoryIds', JSON.stringify(selectedCategories));
+      formData.append("categoryIds", JSON.stringify(selectedCategories));
 
       // Append multiple images
       images.forEach((image) => {
-        formData.append('images', image);
+        formData.append("images", image);
       });
 
-      const response = await fetch(new URL('/products', BASE_API_URL).toString(), {
-        method: 'POST',
-        body: formData,
-      });
+      const response = await fetch(
+        new URL("/products", BASE_API_URL).toString(),
+        {
+          method: "POST",
+          body: formData,
+          headers: getAuthHeaders(),
+        }
+      );
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to create product');
+        throw new Error(data.error || "Failed to create product");
       }
 
-      toast.success('Product created successfully');
-      navigate({ to: '/dashboard/products' });
+      toast.success("Product created successfully");
+      navigate({ to: "/dashboard/products" });
     } catch (error) {
       if (error instanceof z.ZodError) {
-        const errors = error.errors.map(err => `${err.path.join('.')}: ${err.message}`).join(', ');
+        const errors = error.errors
+          .map((err) => `${err.path.join(".")}: ${err.message}`)
+          .join(", ");
         toast.error(`Validation error: ${errors}`);
       } else {
         console.error(error);
-        toast.error(error instanceof Error ? error.message : 'An error occurred');
+        toast.error(
+          error instanceof Error ? error.message : "An error occurred"
+        );
       }
     } finally {
       setIsSubmitting(false);
@@ -417,36 +446,38 @@ function RouteComponent() {
   };
 
   return (
-    <div className="container flex justify-center items-center h-full py-8">
-      <Card className="w-full max-w-2xl">
-        <CardHeader>
-          <CardTitle>Add New Product</CardTitle>
-          <CardDescription>
-            Fields marked with * are required. You can upload up to 10 images.
-          </CardDescription>
-        </CardHeader>
-        <form onSubmit={handleSubmit}>
-          <CardContent className="grid gap-6">
-            <ProductInfoSection 
-              productData={productData} 
-              setProductData={setProductData}
-              categories={categories}
-              selectedCategories={selectedCategories}
-              setSelectedCategories={setSelectedCategories}
-              isSubmitting={isSubmitting}
-            />
-            <ImageUploadSection 
-              images={images} 
-              setImages={setImages}
-              isSubmitting={isSubmitting}
-            />
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? 'Creating...' : 'Add Product'}
-            </Button>
-          </CardContent>
-        </form>
-      </Card>
-    </div>
+    <ProtectedRoute>
+      <div className="container flex justify-center items-center h-full py-8">
+        <Card className="w-full max-w-2xl">
+          <CardHeader>
+            <CardTitle>Add New Product</CardTitle>
+            <CardDescription>
+              Fields marked with * are required. You can upload up to 10 images.
+            </CardDescription>
+          </CardHeader>
+          <form onSubmit={handleSubmit}>
+            <CardContent className="grid gap-6">
+              <ProductInfoSection
+                productData={productData}
+                setProductData={setProductData}
+                categories={categories}
+                selectedCategories={selectedCategories}
+                setSelectedCategories={setSelectedCategories}
+                isSubmitting={isSubmitting}
+              />
+              <ImageUploadSection
+                images={images}
+                setImages={setImages}
+                isSubmitting={isSubmitting}
+              />
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? "Creating..." : "Add Product"}
+              </Button>
+            </CardContent>
+          </form>
+        </Card>
+      </div>
+    </ProtectedRoute>
   );
 }
 

@@ -10,6 +10,7 @@ import { Textarea } from "./ui/textarea";
 import { MultiSelect } from "./ui/multi-select";
 import { z } from "zod";
 import { Plus, X } from "lucide-react";
+import { getAuthHeaders } from "@/lib/auth";
 
 
 export interface Product {
@@ -176,9 +177,7 @@ export function ProductEditModal({
         new URL(`/products/${product.id}`, BASE_API_URL).toString(),
         {
           method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: getAuthHeaders(),
           body: JSON.stringify({
             ...validatedData,
             machineData: JSON.stringify(validatedData.machineData),

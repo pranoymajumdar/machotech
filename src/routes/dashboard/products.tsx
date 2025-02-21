@@ -15,7 +15,8 @@ import { useEffect, useState } from "react";
 import { BASE_API_URL } from "@/constants/utils";
 import { toast } from "sonner";
 import { ProductEditModal, type Product } from "@/components/ProductModal";
-
+import { getAuthHeaders } from "@/lib/auth";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 export const Route = createFileRoute("/dashboard/products")({
   component: RouteComponent,
 });
@@ -28,7 +29,9 @@ function RouteComponent() {
   const fetchProducts = async () => {
     try {
       const apiUrl = new URL("/products", BASE_API_URL).toString();
-      const response = await fetch(apiUrl);
+      const response = await fetch(apiUrl, {
+        headers: getAuthHeaders(),
+      });
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -51,6 +54,7 @@ function RouteComponent() {
 
       const response = await fetch(apiUrl, {
         method: "DELETE",
+        headers: getAuthHeaders(),
       });
 
       if (!response.ok) {
@@ -88,90 +92,92 @@ function RouteComponent() {
   }, []);
 
   return (
-    <Container className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Manage Products</h1>
-      <div className="mb-4">
-        <Link className={cn(buttonVariants())} to="/dashboard/add/product">
-          Add Product
-        </Link>
-      </div>
-      <Table>
-        <TableCaption>A list of your products.</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[100px]">ID</TableHead>
-            <TableHead>Image</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead>Price</TableHead>
-            <TableHead>Hero</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {products.map((product) => (
-            <TableRow key={product.id}>
-              <TableCell className="font-medium">{product.id}</TableCell>
-              <TableCell>
-                {product.machineData.images?.[0] && (
-                  <img
-                    src={new URL(
-                      product.machineData.images[0],
-                      BASE_API_URL
-                    ).toString()}
-                    alt={product.name}
-                    className="w-12 h-12 rounded object-contain bg-muted"
-                  />
-                )}
-              </TableCell>
-              <TableCell>
-                <div>
-                  <div className="font-medium">{product.name}</div>
-                  <div className="text-sm text-muted-foreground line-clamp-1">
-                    {product.description}
-                  </div>
-                </div>
-              </TableCell>
-              <TableCell>
-                {product.isContactForPrice ? (
-                  <span className="text-muted-foreground">
-                    Contact for price
-                  </span>
-                ) : (
-                  product.price || "N/A"
-                )}
-              </TableCell>
-              <TableCell>
-                {product.showInHero && (
-                  <div className="text-sm">Index: {product.heroIndex}</div>
-                )}
-              </TableCell>
-              <TableCell className="text-right">
-                <Button 
-                  size="sm" 
-                  variant="outline"
-                  onClick={() => handleOpenEditModal(product)}
-                >
-                  Edit
-                </Button>
-                <Button
-                  size="sm"
-                  variant="destructive"
-                  className="ml-2"
-                  onClick={() => deleteProduct(product.id)}
-                >
-                  Delete
-                </Button>
-              </TableCell>
+    <ProtectedRoute>
+      <Container className="p-4">
+        <h1 className="text-2xl font-bold mb-4">Manage Products</h1>
+        <div className="mb-4">
+          <Link className={cn(buttonVariants())} to="/dashboard/add/product">
+            Add Product
+          </Link>
+        </div>
+        <Table>
+          <TableCaption>A list of your products.</TableCaption>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[100px]">ID</TableHead>
+              <TableHead>Image</TableHead>
+              <TableHead>Name</TableHead>
+              <TableHead>Price</TableHead>
+              <TableHead>Hero</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <ProductEditModal
-        isOpen={isEditModalOpen}
-        onClose={handleCloseEditModal}
-        product={selectedProduct}
-        onSuccess={handleProductUpdated}
-      />
-    </Container>
+          </TableHeader>
+          <TableBody>
+            {products.map((product) => (
+              <TableRow key={product.id}>
+                <TableCell className="font-medium">{product.id}</TableCell>
+                <TableCell>
+                  {product.machineData.images?.[0] && (
+                    <img
+                      src={new URL(
+                        product.machineData.images[0],
+                        BASE_API_URL
+                      ).toString()}
+                      alt={product.name}
+                      className="w-12 h-12 rounded object-contain bg-muted"
+                    />
+                  )}
+                </TableCell>
+                <TableCell>
+                  <div>
+                    <div className="font-medium">{product.name}</div>
+                    <div className="text-sm text-muted-foreground line-clamp-1">
+                      {product.description}
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  {product.isContactForPrice ? (
+                    <span className="text-muted-foreground">
+                      Contact for price
+                    </span>
+                  ) : (
+                    product.price || "N/A"
+                  )}
+                </TableCell>
+                <TableCell>
+                  {product.showInHero && (
+                    <div className="text-sm">Index: {product.heroIndex}</div>
+                  )}
+                </TableCell>
+                <TableCell className="text-right">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleOpenEditModal(product)}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="destructive"
+                    className="ml-2"
+                    onClick={() => deleteProduct(product.id)}
+                  >
+                    Delete
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        <ProductEditModal
+          isOpen={isEditModalOpen}
+          onClose={handleCloseEditModal}
+          product={selectedProduct}
+          onSuccess={handleProductUpdated}
+        />
+      </Container>
+    </ProtectedRoute>
   );
 }

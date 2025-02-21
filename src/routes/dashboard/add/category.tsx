@@ -23,10 +23,12 @@ import {
 } from "@/components/ui/card";
 import Container from "@/components/ui/container";
 import { BASE_API_URL } from "@/constants/utils";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Upload, ImageIcon } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
+import { getAuthHeadersForFormData, isAuthenticated } from "@/lib/auth";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
 
@@ -173,18 +175,18 @@ function RouteComponent() {
     setIsSubmitting(true);
     try {
       const formData = new FormData();
-      // Make sure field names match exactly with what backend expects
       formData.append("name", values.name.trim());
       formData.append("description", values.description.trim());
       if (values.image) {
-        // Just append the file with field name "image"
         formData.append("image", values.image);
       }
+
       const response = await fetch(
         new URL("/categories", BASE_API_URL).toString(),
         {
           method: "POST",
-          body: formData
+          headers: getAuthHeadersForFormData(),
+          body: formData,
         }
       );
 
@@ -211,111 +213,116 @@ function RouteComponent() {
   }
 
   return (
-    <Container className="py-10">
-      <Card className="max-w-lg mx-auto shadow-lg rounded-xl overflow-hidden">
-        <CardHeader className="bg-gray-50 border-b">
-          <CardTitle className="text-xl font-semibold">
-            Add New Category
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="pt-6">
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <FormField
-                control={form.control}
-                name="image"
-                render={({ field: { onChange, value } }) => (
-                  <FormItem>
-                    <FormLabel>Category Image</FormLabel>
-                    <FormControl>
-                      <ImageUploader onChange={onChange} value={value} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <div className="grid gap-6">
+    <ProtectedRoute>
+      <Container className="py-10">
+        <Card className="max-w-lg mx-auto shadow-lg rounded-xl overflow-hidden">
+          <CardHeader className="bg-gray-50 border-b">
+            <CardTitle className="text-xl font-semibold">
+              Add New Category
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="pt-6">
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-6"
+              >
                 <FormField
                   control={form.control}
-                  name="name"
-                  render={({ field }) => (
+                  name="image"
+                  render={({ field: { onChange, value } }) => (
                     <FormItem>
-                      <FormLabel>Category Name</FormLabel>
+                      <FormLabel>Category Image</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="e.g., Electronics, Home Decor"
-                          {...field}
-                          className="h-10"
-                        />
+                        <ImageUploader onChange={onChange} value={value} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
 
-                <FormField
-                  control={form.control}
-                  name="description"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Category Description</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="Briefly describe this category..."
-                          className="min-h-24 resize-none"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+                <div className="grid gap-6">
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Category Name</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="e.g., Electronics, Home Decor"
+                            {...field}
+                            className="h-10"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-              <CardFooter className="px-0 pb-0 pt-4">
-                <Button
-                  type="submit"
-                  className="w-full h-11 font-medium"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? (
-                    <>
-                      <svg
-                        className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                      </svg>
-                      Creating Category...
-                    </>
-                  ) : (
-                    <>
-                      <Upload className="mr-2 h-4 w-4" />
-                      Create Category
-                    </>
-                  )}
-                </Button>
-              </CardFooter>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
-    </Container>
+                  <FormField
+                    control={form.control}
+                    name="description"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Category Description</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder="Briefly describe this category..."
+                            className="min-h-24 resize-none"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <CardFooter className="px-0 pb-0 pt-4">
+                  <Button
+                    type="submit"
+                    className="w-full h-11 font-medium"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <svg
+                          className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          ></circle>
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          ></path>
+                        </svg>
+                        Creating Category...
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="mr-2 h-4 w-4" />
+                        Create Category
+                      </>
+                    )}
+                  </Button>
+                </CardFooter>
+              </form>
+            </Form>
+          </CardContent>
+        </Card>
+      </Container>
+    </ProtectedRoute>
   );
 }
 

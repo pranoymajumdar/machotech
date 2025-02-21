@@ -19,6 +19,8 @@ import { Route as ProductsProductIdImport } from './routes/products/$productId'
 import { Route as DashboardProductsImport } from './routes/dashboard/products'
 import { Route as DashboardCategoriesImport } from './routes/dashboard/categories'
 import { Route as CategoryCategoryIdImport } from './routes/category/$categoryId'
+import { Route as DashboardAuthRegisterImport } from './routes/dashboard/auth/register'
+import { Route as DashboardAuthLoginImport } from './routes/dashboard/auth/login'
 import { Route as DashboardAddProductImport } from './routes/dashboard/add/product'
 import { Route as DashboardAddCategoryImport } from './routes/dashboard/add/category'
 
@@ -69,6 +71,18 @@ const DashboardCategoriesRoute = DashboardCategoriesImport.update({
 const CategoryCategoryIdRoute = CategoryCategoryIdImport.update({
   id: '/category/$categoryId',
   path: '/category/$categoryId',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const DashboardAuthRegisterRoute = DashboardAuthRegisterImport.update({
+  id: '/dashboard/auth/register',
+  path: '/dashboard/auth/register',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const DashboardAuthLoginRoute = DashboardAuthLoginImport.update({
+  id: '/dashboard/auth/login',
+  path: '/dashboard/auth/login',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -158,6 +172,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAddProductImport
       parentRoute: typeof rootRoute
     }
+    '/dashboard/auth/login': {
+      id: '/dashboard/auth/login'
+      path: '/dashboard/auth/login'
+      fullPath: '/dashboard/auth/login'
+      preLoaderRoute: typeof DashboardAuthLoginImport
+      parentRoute: typeof rootRoute
+    }
+    '/dashboard/auth/register': {
+      id: '/dashboard/auth/register'
+      path: '/dashboard/auth/register'
+      fullPath: '/dashboard/auth/register'
+      preLoaderRoute: typeof DashboardAuthRegisterImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -174,6 +202,8 @@ export interface FileRoutesByFullPath {
   '/products': typeof ProductsIndexRoute
   '/dashboard/add/category': typeof DashboardAddCategoryRoute
   '/dashboard/add/product': typeof DashboardAddProductRoute
+  '/dashboard/auth/login': typeof DashboardAuthLoginRoute
+  '/dashboard/auth/register': typeof DashboardAuthRegisterRoute
 }
 
 export interface FileRoutesByTo {
@@ -187,6 +217,8 @@ export interface FileRoutesByTo {
   '/products': typeof ProductsIndexRoute
   '/dashboard/add/category': typeof DashboardAddCategoryRoute
   '/dashboard/add/product': typeof DashboardAddProductRoute
+  '/dashboard/auth/login': typeof DashboardAuthLoginRoute
+  '/dashboard/auth/register': typeof DashboardAuthRegisterRoute
 }
 
 export interface FileRoutesById {
@@ -201,6 +233,8 @@ export interface FileRoutesById {
   '/products/': typeof ProductsIndexRoute
   '/dashboard/add/category': typeof DashboardAddCategoryRoute
   '/dashboard/add/product': typeof DashboardAddProductRoute
+  '/dashboard/auth/login': typeof DashboardAuthLoginRoute
+  '/dashboard/auth/register': typeof DashboardAuthRegisterRoute
 }
 
 export interface FileRouteTypes {
@@ -216,6 +250,8 @@ export interface FileRouteTypes {
     | '/products'
     | '/dashboard/add/category'
     | '/dashboard/add/product'
+    | '/dashboard/auth/login'
+    | '/dashboard/auth/register'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -228,6 +264,8 @@ export interface FileRouteTypes {
     | '/products'
     | '/dashboard/add/category'
     | '/dashboard/add/product'
+    | '/dashboard/auth/login'
+    | '/dashboard/auth/register'
   id:
     | '__root__'
     | '/'
@@ -240,6 +278,8 @@ export interface FileRouteTypes {
     | '/products/'
     | '/dashboard/add/category'
     | '/dashboard/add/product'
+    | '/dashboard/auth/login'
+    | '/dashboard/auth/register'
   fileRoutesById: FileRoutesById
 }
 
@@ -254,6 +294,8 @@ export interface RootRouteChildren {
   ProductsIndexRoute: typeof ProductsIndexRoute
   DashboardAddCategoryRoute: typeof DashboardAddCategoryRoute
   DashboardAddProductRoute: typeof DashboardAddProductRoute
+  DashboardAuthLoginRoute: typeof DashboardAuthLoginRoute
+  DashboardAuthRegisterRoute: typeof DashboardAuthRegisterRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -267,6 +309,8 @@ const rootRouteChildren: RootRouteChildren = {
   ProductsIndexRoute: ProductsIndexRoute,
   DashboardAddCategoryRoute: DashboardAddCategoryRoute,
   DashboardAddProductRoute: DashboardAddProductRoute,
+  DashboardAuthLoginRoute: DashboardAuthLoginRoute,
+  DashboardAuthRegisterRoute: DashboardAuthRegisterRoute,
 }
 
 export const routeTree = rootRoute
@@ -288,7 +332,9 @@ export const routeTree = rootRoute
         "/dashboard/",
         "/products/",
         "/dashboard/add/category",
-        "/dashboard/add/product"
+        "/dashboard/add/product",
+        "/dashboard/auth/login",
+        "/dashboard/auth/register"
       ]
     },
     "/": {
@@ -320,6 +366,12 @@ export const routeTree = rootRoute
     },
     "/dashboard/add/product": {
       "filePath": "dashboard/add/product.tsx"
+    },
+    "/dashboard/auth/login": {
+      "filePath": "dashboard/auth/login.tsx"
+    },
+    "/dashboard/auth/register": {
+      "filePath": "dashboard/auth/register.tsx"
     }
   }
 }
