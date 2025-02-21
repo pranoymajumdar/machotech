@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer base {
   :root {
     --background: 220 40% 98%; /* Light Grayish Background - keep as is for general background */
@@ -13,19 +12,19 @@
     --popover-foreground: 220 20% 15%; /* Dark Gray Popover Foreground - keep as is */
 
     /* --- RED PALETTE --- */
-    --primary: 350 90% 50%;       /* Vibrant Red for Primary Actions */
+    --primary: 350 90% 50%; /* Vibrant Red for Primary Actions */
     --primary-foreground: 0 0% 100%; /* White text on Primary Red */
-    --secondary: 0 20% 92%;      /* Very Light Red/Pink for Secondary Backgrounds */
+    --secondary: 0 20% 92%; /* Very Light Red/Pink for Secondary Backgrounds */
     --secondary-foreground: 350 20% 15%; /* Darker Reddish Gray for Secondary Text */
-    --muted: 0 15% 90%;          /* Light Reddish Gray for Muted Backgrounds */
-    --muted-foreground: 0 10% 50%;   /* Medium Reddish Gray for Muted Text */
-    --accent: 355 80% 55%;        /* Slightly different Red Accent Color */
-    --accent-foreground: 0 0% 100%;  /* White text on Accent Red */
-    --destructive: 0 80% 55%;     /* Stronger Red for Destructive Actions */
+    --muted: 0 15% 90%; /* Light Reddish Gray for Muted Backgrounds */
+    --muted-foreground: 0 10% 50%; /* Medium Reddish Gray for Muted Text */
+    --accent: 355 80% 55%; /* Slightly different Red Accent Color */
+    --accent-foreground: 0 0% 100%; /* White text on Accent Red */
+    --destructive: 0 80% 55%; /* Stronger Red for Destructive Actions */
     --destructive-foreground: 0 0% 100%; /* White text on Destructive Red */
-    --border: 0 15% 85%;          /* Light Reddish Border */
-    --input: 0 15% 85%;           /* Light Reddish Input Background */
-    --ring: 350 90% 50%;          /* Red Ring Color (matches primary) */
+    --border: 0 15% 85%; /* Light Reddish Border */
+    --input: 0 15% 85%; /* Light Reddish Input Background */
+    --ring: 350 90% 50%; /* Red Ring Color (matches primary) */
     --radius: 0.75rem;
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -51,6 +50,33 @@
 @layer base {
   * {
     @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    border-radius: 10px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: #edf2f7;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
